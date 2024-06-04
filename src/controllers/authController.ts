@@ -1,7 +1,9 @@
+// src/controllers/authController.ts
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
+import User from '../models/User';
 
 export const register = (client: MongoClient) => async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
@@ -15,10 +17,12 @@ export const register = (client: MongoClient) => async (req: Request, res: Respo
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const newUser = { username, email, password: hashedPassword };
-    await db.collection('users').insertOne(newUser);
+    const newUser: User = { username, email, password: hashedPassword };
+    const result = await db.collection('users').insertOne(newUser);
 
-    res.status(201).json({ message: 'User registered successfully' });
+    const createdUser = await db.collection('users').findOne({ _id: result.insertedId });
+
+    res.status(201).json({ message: 'User registered successfully', user: createdUser });
   } catch (error) {
     console.error('Error registering user:', error);
     res.status(500).json({ message: 'Server error' });

@@ -1,9 +1,10 @@
-// src/middleware/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-interface AuthenticatedRequest extends Request {
-  user?: string | object;
+export interface AuthenticatedRequest extends Request {
+  user?: {
+    userId: string;
+  };
 }
 
 export const authenticateToken = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
@@ -15,7 +16,7 @@ export const authenticateToken = (req: AuthenticatedRequest, res: Response, next
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-    req.user = decoded;
+    req.user = decoded as { userId: string };
     next();
   } catch (error) {
     res.status(400).json({ message: 'Invalid token.' });

@@ -3,6 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import authRoutes from './routes/authRoutes';
+import todoRoutes from './routes/todoRoutes';
+import projectRoutes from './routes/projectRoutes';
 
 dotenv.config();
 
@@ -30,6 +32,8 @@ async function connectDB() {
 
     // Routes
     app.use('/api/auth', authRoutes(client));
+    app.use('/api/todos', todoRoutes(client));
+    app.use('/api/projects', projectRoutes(client));
 
     // Sample route
     app.get('/', (req: Request, res: Response) => {
