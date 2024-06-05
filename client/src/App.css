@@ -28,7 +28,22 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(1) .logo {
+  .logo.react {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+@keyframes logo-spin-2 {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .logo.woo {
     animation: logo-spin infinite 20s linear;
   }
 }
