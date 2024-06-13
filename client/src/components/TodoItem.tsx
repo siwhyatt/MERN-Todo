@@ -1,4 +1,4 @@
-import { Badge, Box, Flex, Spinner, Text } from "@chakra-ui/react";
+import { Badge, Box, Flex, Spinner, Text, useToast } from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
 import { Todo } from "./TodoList";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -18,7 +18,7 @@ interface TodoItemProps {
 
 const TodoItem = ({ todo, token }: TodoItemProps) => {
   const queryClient = useQueryClient();
-
+  const toast = useToast();
 
   const { mutate: deleteTodo, isPending: isDeleting } = useMutation({
     mutationKey: ["deleteTodo"],
@@ -26,6 +26,10 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
       try {
         const res = await fetch(BASE_URL + `/todos/${todo._id}`, {
           method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
         });
         const data = await res.json();
         if (!res.ok) {
@@ -37,6 +41,13 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
       }
     },
     onSuccess: () => {
+      toast({
+        title: "Todo deleted.",
+        description: "The todo item has been deleted successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
       queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
   });

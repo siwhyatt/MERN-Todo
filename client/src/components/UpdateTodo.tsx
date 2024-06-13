@@ -108,10 +108,10 @@ const UpdateTodo = ({ todo, token }: UpdateTodoProps) => {
                   onChange={setNewTime}
                 >
                   <Stack spacing={5} direction="row">
-                    <Radio value="15">15 mins</Radio>
-                    <Radio value="30">30 mins</Radio>
-                    <Radio value="60">1 hour</Radio>
-                    <Radio value="120">2 hours</Radio>
+                    <Radio value="15">15m</Radio>
+                    <Radio value="30">30m</Radio>
+                    <Radio value="60">1h</Radio>
+                    <Radio value="120">2h</Radio>
                   </Stack>
                 </RadioGroup>
                 <RadioGroup
