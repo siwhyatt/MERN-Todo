@@ -1,4 +1,4 @@
-import { Button, Flex, Input, Spinner, useToast } from "@chakra-ui/react";
+import { Button, Flex, Input, Spinner, RadioGroup, Radio, Stack, useToast, TabList, Tab, TabPanels, TabPanel, Tabs } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
@@ -10,6 +10,8 @@ interface TodoFormProps {
 
 const TodoForm = ({ token }: TodoFormProps) => {
   const [newTodo, setNewTodo] = useState("");
+  const [newTime, setNewTime] = useState("15");
+  const [newPriority, setNewPriority] = useState("medium");
   const queryClient = useQueryClient();
   const toast = useToast();
 
@@ -26,9 +28,8 @@ const TodoForm = ({ token }: TodoFormProps) => {
           },
           body: JSON.stringify({
             title: newTodo,
-            time: 15,
-            priority: "medium",
-            completed: false
+            time: parseInt(newTime),
+            priority: newPriority,
           }),
         })
         const data = await res.json();
@@ -78,6 +79,43 @@ const TodoForm = ({ token }: TodoFormProps) => {
           {isCreating ? <Spinner size={"xs"} /> : <IoMdAdd size={30} />}
         </Button>
       </Flex>
+      <Tabs variant='soft-rounded' colorScheme='blue'>
+        <TabList>
+          <Tab>Time</Tab>
+          <Tab>Priority</Tab>
+          <Tab>Project</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <RadioGroup
+              value={newTime}
+              onChange={setNewTime}
+            >
+              <Stack spacing={5} direction={['column', 'row']}>
+                <Radio value="15">15 mins</Radio>
+                <Radio value="30">30 mins</Radio>
+                <Radio value="60">1 hour</Radio>
+                <Radio value="120">2 hours</Radio>
+              </Stack>
+            </RadioGroup>
+          </TabPanel>
+          <TabPanel>
+            <RadioGroup
+              value={newPriority}
+              onChange={setNewPriority}
+            >
+              <Stack spacing={5} direction="row">
+                <Radio size='lg' value="low" colorScheme='blue'>Low</Radio>
+                <Radio size='lg' value="medium" colorScheme='green'>Med</Radio>
+                <Radio size='lg' value="high" colorScheme='red'>High</Radio>
+              </Stack>
+            </RadioGroup>
+          </TabPanel>
+          <TabPanel>
+            <p>To do</p>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </form>
   );
 };
