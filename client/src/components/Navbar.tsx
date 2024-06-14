@@ -1,4 +1,4 @@
-import { Box, Button, Container, Flex, Text, useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { Box, Button, Container, Flex, Text, FormControl, FormLabel, Switch, useColorMode, useColorModeValue } from "@chakra-ui/react";
 import reactLogo from '../assets/react.svg'
 import wooLogo from '../assets/WooSimon Logo DSG.png'
 import { IoMoon } from "react-icons/io5";
@@ -19,6 +19,14 @@ export default function Navbar() {
             <a href="https://react.dev" target="_blank">
               <img src={reactLogo} className="logo react" alt="React logo" />
             </a>
+          </Flex>
+          <Flex>
+            <FormControl display='flex' alignItems='center'>
+              <FormLabel htmlFor='sort-todos' mb='0'>
+                Filter by time?
+              </FormLabel>
+              <Switch id='sort-todos' />
+            </FormControl>
           </Flex>
           <Flex alignItems={"center"} gap={3}>
             <Text fontSize={"lg"} fontWeight={500}>

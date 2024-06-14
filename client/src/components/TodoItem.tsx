@@ -1,14 +1,62 @@
-import { Badge, Box, Flex, Spinner, Text, useToast } from "@chakra-ui/react";
+import { Badge, Box, Flex, Spinner, Text, useToast, useColorMode } from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
 import { Todo } from "./TodoList";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
 import UpdateTodo from "./UpdateTodo.tsx"
 
-const priorityStyles: { [key: string]: { color: string, badgeColor: string, badgeText: string } } = {
-  low: { color: "blue.200", badgeColor: "blue", badgeText: "Low Priority" },
-  medium: { color: "yellow.200", badgeColor: "yellow", badgeText: "Todo" },
-  high: { color: "red.200", badgeColor: "red", badgeText: "Urgent" },
+const usePriorityStyles = () => {
+  const { colorMode } = useColorMode();
+
+  return {
+    low: {
+      color: colorMode === "light" ? "blue.700" : "blue.200",
+      badgeColor: "blue",
+      badgeText: "Low",
+    },
+    medium: {
+      color: colorMode === "light" ? "yellow.700" : "yellow.200",
+      badgeColor: "yellow",
+      badgeText: "Todo",
+    },
+    high: {
+      color: colorMode === "light" ? "red.700" : "red.200",
+      badgeColor: "red",
+      badgeText: "High",
+    },
+  };
+};
+
+const useTimeStyles = () => {
+  const { colorMode } = useColorMode();
+
+  return (time: number) => {
+    if (time <= 15) {
+      return {
+        color: colorMode === "light" ? "green.700" : "green.200",
+        badgeColor: "green",
+        badgeText: "15m",
+      };
+    } else if (time <= 30) {
+      return {
+        color: colorMode === "light" ? "blue.700" : "blue.200",
+        badgeColor: "blue",
+        badgeText: "30m",
+      };
+    } else if (time <= 60) {
+      return {
+        color: colorMode === "light" ? "yellow.700" : "yellow.200",
+        badgeColor: "yellow",
+        badgeText: "1h",
+      };
+    } else {
+      return {
+        color: colorMode === "light" ? "red.700" : "red.200",
+        badgeColor: "red",
+        badgeText: "2h",
+      };
+    }
+  };
 };
 
 interface TodoItemProps {
@@ -19,6 +67,8 @@ interface TodoItemProps {
 const TodoItem = ({ todo, token }: TodoItemProps) => {
   const queryClient = useQueryClient();
   const toast = useToast();
+  const priorityStyles = usePriorityStyles();
+  const getTimeStyles = useTimeStyles();
 
   const { mutate: deleteTodo, isPending: isDeleting } = useMutation({
     mutationKey: ["deleteTodo"],
@@ -53,6 +103,7 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
   });
 
   const styles = priorityStyles[todo.priority];
+  const timeStyles = getTimeStyles(todo.time);
 
   return (
     <Flex gap={2} alignItems={"center"}>
@@ -70,9 +121,14 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
         >
           {todo.title}
         </Text>
-        <Badge ml='1' colorScheme={styles.badgeColor}>
-          {styles.badgeText}
-        </Badge>
+        <div>
+          <Badge ml="1" colorScheme={timeStyles.badgeColor}>
+            {timeStyles.badgeText}
+          </Badge>
+          <Badge ml='1' colorScheme={styles.badgeColor}>
+            {styles.badgeText}
+          </Badge>
+        </div>
       </Flex>
       <Flex gap={2} alignItems={"center"}>
         <UpdateTodo key={todo._id} todo={todo} token={token} />

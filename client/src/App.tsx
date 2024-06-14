@@ -6,6 +6,7 @@ import RegistrationForm from './components/RegistrationForm'
 import LoginForm from './components/LoginForm'
 import { useState } from 'react'
 import TodoList from './components/TodoList'
+import Footer from './components/Footer'
 
 export const BASE_URL = "http://localhost:5000/api"
 
@@ -38,6 +39,7 @@ function App() {
             </>
           )}
         </Container>
+        <Footer />
       </Stack>
     </>
   )
