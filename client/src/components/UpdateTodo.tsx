@@ -20,6 +20,7 @@ import {
 } from '@chakra-ui/react'
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import ProjectSelector from "./ProjectSelector";
 
 interface UpdateTodoProps {
   todo: Todo;
@@ -31,6 +32,7 @@ const UpdateTodo = ({ todo, token }: UpdateTodoProps) => {
   const [newTitle, setNewTitle] = useState(todo.title);
   const [newTime, setNewTime] = useState(todo.time.toString());
   const [newPriority, setNewPriority] = useState(todo.priority);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(todo.projectId || null);
   const queryClient = useQueryClient();
   const toast = useToast();
 
@@ -48,6 +50,7 @@ const UpdateTodo = ({ todo, token }: UpdateTodoProps) => {
             title: newTitle,
             time: parseInt(newTime),
             priority: newPriority,
+            projectId: selectedProjectId,
           }),
 
         });
@@ -124,6 +127,11 @@ const UpdateTodo = ({ todo, token }: UpdateTodoProps) => {
                     <Radio size='lg' value="high" colorScheme='red'>High</Radio>
                   </Stack>
                 </RadioGroup>
+                <ProjectSelector
+                  token={token}
+                  onProjectSelect={setSelectedProjectId}
+                  initialProjectId={selectedProjectId}
+                />
               </Stack>
             </ModalBody>
             <ModalFooter>
