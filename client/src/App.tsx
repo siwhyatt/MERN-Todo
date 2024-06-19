@@ -1,47 +1,43 @@
 import './App.css'
-import { Stack, Container, Tabs, TabList, Tab, TabPanel, TabPanels } from '@chakra-ui/react'
+import { Stack, Container } from '@chakra-ui/react'
 import Navbar from './components/Navbar'
-import TodoForm from './components/TodoForm'
-import RegistrationForm from './components/RegistrationForm'
-import LoginForm from './components/LoginForm'
 import { useState } from 'react'
-import TodoList from './components/TodoList'
 import Footer from './components/Footer'
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import TodoPage from './components/TodoPage'
+import Projects from './components/Projects'
+import User from './components/User'
+import LoginPage from './components/LoginPage'
 
 export const BASE_URL = "http://localhost:5000/api"
 
 function App() {
   const [token, setToken] = useState<string | null>(null);
   return (
-    <>
+    <Router>
       <Stack h="100vh" >
         <Navbar />
         <Container>
           {!token ? (
-            <Tabs>
-              <TabList>
-                <Tab>Register</Tab>
-                <Tab>Login</Tab>
-              </TabList>
-              <TabPanels>
-                <TabPanel>
-                  <RegistrationForm />
-                </TabPanel>
-                <TabPanel>
-                  <LoginForm setToken={setToken} />
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
+            <Routes>
+              <Route path="/" element={<Navigate to="/login" />} />
+              <Route path="/login" element={<LoginPage setToken={setToken} />} />
+            </Routes>
           ) : (
             <>
-              <TodoForm token={token} />
-              <TodoList token={token} />
+              <Routes>
+                <Route path="/" element={<Navigate to="/todos" />} />
+                <Route path="/login" element={<Navigate to="/todos" />} />
+                <Route path="/todos" element={<TodoPage token={token} />} />
+                <Route path="/projects" element={<Projects token={token} />} />
+                <Route path="/user" element={<User token={token} />} />
+              </Routes>
             </>
           )}
         </Container>
         <Footer />
       </Stack>
-    </>
+    </Router>
   )
 }
 

@@ -1,9 +1,9 @@
-import { Box, Button, Container, Flex, Text, FormControl, FormLabel, Switch, useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { Box, Button, Container, Flex, Text, Link, FormControl, FormLabel, Switch, useColorMode, useColorModeValue } from "@chakra-ui/react";
 import reactLogo from '../assets/react.svg'
 import wooLogo from '../assets/WooSimon Logo DSG.png'
 import { IoMoon } from "react-icons/io5";
 import { LuSun } from "react-icons/lu";
-
+import { Link as RouterLink } from "react-router-dom";
 
 export default function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -21,12 +21,15 @@ export default function Navbar() {
             </a>
           </Flex>
           <Flex>
-            <FormControl display='flex' alignItems='center'>
-              <FormLabel htmlFor='sort-todos' mb='0'>
-                Filter by time?
-              </FormLabel>
-              <Switch id='sort-todos' />
-            </FormControl>
+            <Link as={RouterLink} to="/todos" color="white" mr={4}>
+              Todos
+            </Link>
+            <Link as={RouterLink} to="/projects" color="white" mr={4}>
+              Projects
+            </Link>
+            <Link as={RouterLink} to="/user" color="white">
+              User
+            </Link>
           </Flex>
           <Flex alignItems={"center"} gap={3}>
             <Text fontSize={"lg"} fontWeight={500}>
