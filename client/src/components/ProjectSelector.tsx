@@ -8,6 +8,7 @@ interface ProjectSelectorProps {
   token: string;
   onProjectSelect: (projectId: string | null) => void;
   initialProjectId?: string | null;
+  initialProjectName?: string | null;
 }
 
 interface Project {
@@ -22,7 +23,7 @@ const ProjectSelector = ({ token, onProjectSelect, initialProjectId = null }: Pr
   const toast = useToast();
 
   // Fetch the list of projects
-  const { data: projects, isLoading: isProjectsLoading } = useQuery<Project[]>({
+  const { data: projects } = useQuery<Project[]>({
     queryKey: ["projects"],
     queryFn: async () => {
       const res = await fetch(BASE_URL + "/projects", {
