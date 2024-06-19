@@ -8,6 +8,7 @@ import TodoPage from './components/TodoPage'
 import Projects from './components/Projects'
 import User from './components/User'
 import LoginPage from './components/LoginPage'
+import PrivateRoute from './components/PrivateRoute'
 
 export const BASE_URL = "http://localhost:5000/api"
 
@@ -23,23 +24,16 @@ function App() {
     <Router>
       <Stack h="100vh" >
         <Navbar logout={logout} token={token} />
-        <Container>
-          {!token ? (
-            <Routes>
-              <Route path="/" element={<Navigate to="/login" />} />
-              <Route path="/login" element={<LoginPage setToken={setToken} />} />
-            </Routes>
-          ) : (
-            <>
-              <Routes>
-                <Route path="/" element={<Navigate to="/todos" />} />
-                <Route path="/login" element={<Navigate to="/todos" />} />
-                <Route path="/todos" element={<TodoPage token={token} />} />
-                <Route path="/projects" element={<Projects token={token} />} />
-                <Route path="/user" element={<User token={token} />} />
-              </Routes>
-            </>
-          )}
+        <Container h="100vh" >
+          <Routes>
+            <Route path="/" element={token ? <Navigate to="/todos" /> : <Navigate to="/login" />} />
+            <Route path="/login" element={<LoginPage setToken={setToken} />} />
+            <Route element={<PrivateRoute token={token} />}>
+              <Route path="/todos" element={<TodoPage token={token} />} />
+              <Route path="/projects" element={<Projects token={token} />} />
+              <Route path="/user" element={<User token={token} />} />
+            </Route>
+          </Routes>
         </Container>
         <Footer />
       </Stack>

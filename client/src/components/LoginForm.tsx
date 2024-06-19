@@ -1,10 +1,12 @@
 import { Button, Input, Stack, useToast } from "@chakra-ui/react";
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
 
 const LoginForm = ({ setToken }: { setToken: (token: string) => void }) => {
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
   const toast = useToast();
 
   const { mutate: loginUser, isPending } = useMutation({
@@ -35,6 +37,8 @@ const LoginForm = ({ setToken }: { setToken: (token: string) => void }) => {
       });
       setToken(data.token);
       setFormData({ email: "", password: "" });
+      localStorage.setItem('token', data.token);
+      navigate('/todos');
     },
     onError: (error: any) => {
       toast({

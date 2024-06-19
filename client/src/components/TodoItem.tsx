@@ -115,6 +115,7 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
         p={2}
         borderRadius={"lg"}
         justifyContent={"space-between"}
+        flexDirection={{ base: "column", md: "row" }}
       >
         <Text
           color={styles.color}
@@ -130,7 +131,7 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
           </Badge>
         </div>
       </Flex>
-      <Flex gap={2} alignItems={"center"}>
+      <Flex gap={2} alignItems={"center"} flexDirection={{ base: "column", md: "row" }}>
         <UpdateTodo key={todo._id} todo={todo} token={token} />
         <Box color={"red.500"} cursor={"pointer"} onClick={() => deleteTodo()}>
           {!isDeleting && <MdDelete size={25} />}
