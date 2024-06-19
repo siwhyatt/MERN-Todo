@@ -1,11 +1,16 @@
-import { Box, Button, Container, Flex, Text, Link, FormControl, FormLabel, Switch, useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { Box, Button, Container, Flex, Text, Link, useColorMode, useColorModeValue } from "@chakra-ui/react";
 import reactLogo from '../assets/react.svg'
 import wooLogo from '../assets/WooSimon Logo DSG.png'
 import { IoMoon } from "react-icons/io5";
 import { LuSun } from "react-icons/lu";
 import { Link as RouterLink } from "react-router-dom";
 
-export default function Navbar() {
+interface NavbarProps {
+  logout: () => void;
+  token: string | null;
+}
+
+const Navbar = ({ logout, token }: NavbarProps) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
@@ -39,9 +44,16 @@ export default function Navbar() {
             <Button onClick={toggleColorMode}>
               {colorMode === "light" ? <IoMoon /> : <LuSun size={20} />}
             </Button>
+            {token && (
+              <Button onClick={logout}>
+                Logout
+              </Button>
+            )}
           </Flex>
         </Flex>
       </Box>
     </Container>
   )
 }
+
+export default Navbar;

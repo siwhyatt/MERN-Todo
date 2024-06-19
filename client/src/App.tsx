@@ -12,11 +12,17 @@ import LoginPage from './components/LoginPage'
 export const BASE_URL = "http://localhost:5000/api"
 
 function App() {
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
+
+  const logout = () => {
+    setToken(null);
+    localStorage.removeItem('token');
+  };
+
   return (
     <Router>
       <Stack h="100vh" >
-        <Navbar />
+        <Navbar logout={logout} token={token} />
         <Container>
           {!token ? (
             <Routes>
