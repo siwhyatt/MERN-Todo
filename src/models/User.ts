@@ -6,6 +6,8 @@ interface User {
   username: string;
   email: string;
   password: string;
+  resetToken?: string;
+  resetTokenExpiry?: Date;
 }
 
 export default User;

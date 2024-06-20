@@ -9,6 +9,9 @@ import Projects from './components/Projects'
 import User from './components/User'
 import LoginPage from './components/LoginPage'
 import PrivateRoute from './components/PrivateRoute'
+import RequestToken from './components/RequestToken'
+import EmailSent from './components/EmailSent'
+import ResetPassword from './components/ResetPassword'
 
 export const BASE_URL = "http://localhost:5000/api"
 
@@ -24,10 +27,13 @@ function App() {
     <Router>
       <Stack h="100vh" >
         <Navbar logout={logout} token={token} />
-        <Container h="100vh" >
+        <Container >
           <Routes>
             <Route path="/" element={token ? <Navigate to="/todos" /> : <Navigate to="/login" />} />
             <Route path="/login" element={<LoginPage setToken={setToken} />} />
+            <Route path="/reset-password/request" element={<RequestToken />} />
+            <Route path="/reset-password/email-sent" element={<EmailSent />} />
+            <Route path="/reset-password/" element={<ResetPassword />} />
             <Route element={<PrivateRoute token={token} />}>
               <Route path="/todos" element={<TodoPage token={token} />} />
               <Route path="/projects" element={<Projects token={token} />} />

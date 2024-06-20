@@ -23,8 +23,8 @@ const sendResetPasswordEmail = async ({ to, token }: SendResetPasswordEmailOptio
     from: `Full Stack Cat <${process.env.SMTP_USER}>`,
     to: to, // list of receivers
     subject: 'Password Reset Request', // Subject line
-    text: `You requested a password reset. Please use the following link to reset your password: https://your-site.com/reset-password?token=${token}`, // plain text body
-    html: `<p>You requested a password reset. Please use the following link to reset your password: <a href="https://your-site.com/reset-password?token=${token}">Reset Password</a></p>`, // html body
+    text: `You requested a password reset. Please use the following link to reset your password: https://todo.fullstack.cat/reset-password?resetToken=${token}`, // plain text body
+    html: `<p>You requested a password reset. Please use the following link to reset your password: <a href="https://todo.fullstack.cat/reset-password?resetToken=${token}">Reset Password</a></p>`, // html body
   };
 
   await transporter.sendMail(mailOptions);

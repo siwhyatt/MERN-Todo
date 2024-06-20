@@ -1,19 +1,18 @@
-import { Button, Input, Stack, Link, useToast } from "@chakra-ui/react";
-import { Link as RouterLink } from "react-router-dom";
+import { Button, Input, Stack, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
 
-const LoginForm = ({ setToken }: { setToken: (token: string) => void }) => {
-  const [formData, setFormData] = useState({ email: "", password: "" });
+const RequestToken = () => {
+  const [formData, setFormData] = useState({ email: "" });
   const navigate = useNavigate();
   const toast = useToast();
 
-  const { mutate: loginUser, isPending } = useMutation({
-    mutationKey: ["loginUser"],
+  const { mutate: requestToken, isPending } = useMutation({
+    mutationKey: ["requestToken"],
     mutationFn: async () => {
-      const res = await fetch(BASE_URL + `/auth/login`, {
+      const res = await fetch(BASE_URL + `/reset-password/request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,20 +29,18 @@ const LoginForm = ({ setToken }: { setToken: (token: string) => void }) => {
     },
     onSuccess: (data) => {
       toast({
-        title: "Login successful.",
-        description: "You have successfully logged in.",
+        title: "Request successful.",
+        description: "Please check your email inbox.",
         status: "success",
         duration: 5000,
         isClosable: true,
       });
-      setToken(data.token);
-      setFormData({ email: "", password: "" });
-      localStorage.setItem('token', data.token);
-      navigate('/todos');
+      setFormData({ email: "" });
+      navigate('/reset-password/email-sent');
     },
     onError: (error: any) => {
       toast({
-        title: "Login failed.",
+        title: "Request failed.",
         description: error.message,
         status: "error",
         duration: 5000,
@@ -58,7 +55,7 @@ const LoginForm = ({ setToken }: { setToken: (token: string) => void }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    loginUser();
+    requestToken();
   };
 
   return (
@@ -72,22 +69,14 @@ const LoginForm = ({ setToken }: { setToken: (token: string) => void }) => {
           placeholder="Email"
           required
         />
-        <Input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Password"
-          required
-        />
         <Button type="submit" isLoading={isPending} colorScheme="teal">
-          Login
+          Send Request
         </Button>
-        <Link align="center" as={RouterLink} to="/reset-password/request">Forgot password?</Link>
       </Stack>
     </form>
   );
 };
 
-export default LoginForm;
+export default RequestToken;
+
 
