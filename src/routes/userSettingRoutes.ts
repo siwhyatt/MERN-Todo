@@ -1,0 +1,61 @@
+// src/routes/userSettingRoutes.ts
+import { Router, Response } from 'express';
+import { MongoClient, ObjectId } from 'mongodb';
+import { authenticateToken, AuthenticatedRequest } from '../middleware/authMiddleware';
+
+const userSettingRoutes = (client: MongoClient): Router => {
+  const router = Router();
+
+  // Get all userSettings for the logged-in user
+  router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    const userId = req.user?.userId;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'UserId is required' });
+    }
+
+    try {
+      const db = client.db();
+      const userSettings = await db.collection('userSettings').find({ userId: new ObjectId(userId) }).toArray();
+
+      res.status(200).json(userSettings);
+    } catch (error) {
+      console.error('Error fetching userSettings:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+  // Update user settings
+  router.put('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    const { id } = req.params;
+    const { defaultTime, defaultPriority } = req.body;
+    const userId = req.user?.userId;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'UserId is required' });
+    }
+
+    try {
+      const db = client.db();
+      const result = await db.collection('userSettings').updateOne(
+        { _id: new ObjectId(id), userId: new ObjectId(userId) },
+        { $set: { defaultTime, defaultPriority } }
+      );
+
+      if (result.matchedCount === 0) {
+        return res.status(404).json({ message: 'Settings not found' });
+      }
+
+      res.status(200).json({ message: 'Settings updated successfully' });
+    } catch (error) {
+      console.error('Error updating settings:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+  return router;
+};
+
+export default userSettingRoutes;
+
+
