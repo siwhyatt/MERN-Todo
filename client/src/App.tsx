@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Footer from './components/Footer'
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import TodoPage from './components/TodoPage'
-import Projects from './components/Projects'
+import ProjectsPage from './components/ProjectsPage'
 import User from './components/User'
 import LoginPage from './components/LoginPage'
 import PrivateRoute from './components/PrivateRoute'
@@ -36,7 +36,7 @@ function App() {
             <Route path="/reset-password/" element={<ResetPassword />} />
             <Route element={<PrivateRoute token={token} />}>
               <Route path="/todos" element={<TodoPage token={token} />} />
-              <Route path="/projects" element={<Projects token={token} />} />
+              <Route path="/projects" element={<ProjectsPage token={token} />} />
               <Route path="/user" element={<User token={token} />} />
             </Route>
           </Routes>

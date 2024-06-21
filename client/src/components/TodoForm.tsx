@@ -19,7 +19,7 @@ const TodoForm = ({ token }: TodoFormProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isCreated, setIsCreated] = useState(false);
 
-  const { mutate: createTodo, isLoading: isCreating } = useMutation({
+  const { mutate: createTodo, isPending: isCreating } = useMutation({
     mutationKey: ['createTodo'],
     mutationFn: async () => {
       try {

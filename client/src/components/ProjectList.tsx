@@ -1,28 +1,25 @@
 import { Flex, Spinner, Stack, Text } from "@chakra-ui/react";
-import TodoItem from "./TodoItem";
+import ProjectItem from "./ProjectItem";
 import { useQuery } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
 
-export type Todo = {
+export type Project = {
   _id: string;
   userId: string;
-  title: string;
-  time: number;
-  priority: string;
-  completed: boolean;
-  projectId: string | null;
+  name: string;
+  description?: string | null;
 };
 
-interface TodoListProps {
+interface ProjectListProps {
   token: string;
 }
 
-const TodoList = ({ token }: TodoListProps) => {
-  const { data: todos, isLoading } = useQuery<Todo[]>({
-    queryKey: ["todos"],
+const ProjectList = ({ token }: ProjectListProps) => {
+  const { data: projects, isLoading } = useQuery<Project[]>({
+    queryKey: ["projects"],
     queryFn: async () => {
       try {
-        const res = await fetch(BASE_URL + "/todos", {
+        const res = await fetch(BASE_URL + "/projects", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -48,19 +45,20 @@ const TodoList = ({ token }: TodoListProps) => {
           <Spinner size={"xl"} />
         </Flex>
       )}
-      {!isLoading && todos?.length === 0 && (
+      {!isLoading && projects?.length === 0 && (
         <Stack alignItems={"center"} gap='3'>
           <Text fontSize={"xl"} textAlign={"center"} color={"gray.500"}>
-            All tasks completed! 🤞
+            You have no projects at the moment
           </Text>
         </Stack>
       )}
       <Stack gap={3}>
-        {todos?.map((todo) => (
-          <TodoItem key={todo._id} todo={todo} token={token} />
+        {projects?.map((project) => (
+          <ProjectItem key={project._id} project={project} token={token} />
         ))}
       </Stack>
     </>
   );
 };
-export default TodoList;
+export default ProjectList;
+

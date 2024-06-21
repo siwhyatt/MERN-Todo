@@ -109,7 +109,7 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
     <Flex gap={2} alignItems={"center"}>
       <Flex
         flex={1}
-        alignItems={"center"}
+        alignItems={"start"}
         border={"1px"}
         borderColor={"gray.600"}
         p={2}
