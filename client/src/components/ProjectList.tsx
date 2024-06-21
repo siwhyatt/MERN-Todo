@@ -1,7 +1,6 @@
 import { Flex, Spinner, Stack, Text } from "@chakra-ui/react";
 import ProjectItem from "./ProjectItem";
-import { useQuery } from "@tanstack/react-query";
-import { BASE_URL } from "../App";
+import { useProjectsQuery } from "../hooks/useProjects";
 
 export type Project = {
   _id: string;
@@ -15,28 +14,12 @@ interface ProjectListProps {
 }
 
 const ProjectList = ({ token }: ProjectListProps) => {
-  const { data: projects, isLoading } = useQuery<Project[]>({
-    queryKey: ["projects"],
-    queryFn: async () => {
-      try {
-        const res = await fetch(BASE_URL + "/projects", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-          }
-        });
-        const data = await res.json();
+  const { data: projects, isLoading, error } = useProjectsQuery(token);
 
-        if (!res.ok) {
-          throw new Error(data.error || "Something went wrong");
-        }
-        return data || [];
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  });
+  if (error) {
+    // Handle errors here (optional)
+    return <div>Error fetching projects: {error.message}</div>;
+  }
 
   return (
     <>

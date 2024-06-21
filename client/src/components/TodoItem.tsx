@@ -1,9 +1,10 @@
-import { Badge, Box, Flex, Spinner, Text, useToast, useColorMode } from "@chakra-ui/react";
+import { Badge, Stack, Box, Flex, Spinner, Text, useToast, useColorMode } from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
 import { Todo } from "./TodoList";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
 import UpdateTodo from "./UpdateTodo.tsx"
+import { useProjectsQuery } from "../hooks/useProjects";
 
 const usePriorityStyles = () => {
   const { colorMode } = useColorMode();
@@ -69,6 +70,8 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
   const toast = useToast();
   const priorityStyles = usePriorityStyles();
   const getTimeStyles = useTimeStyles();
+  const { data: projects, isLoading, error } = useProjectsQuery(token);
+  const project = projects?.find((project) => project._id === todo.projectId);
 
   const { mutate: deleteTodo, isPending: isDeleting } = useMutation({
     mutationKey: ["deleteTodo"],
@@ -117,11 +120,20 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
         justifyContent={"space-between"}
         flexDirection={{ base: "column", md: "row" }}
       >
-        <Text
-          color={styles.color}
-        >
-          {todo.title}
-        </Text>
+        <Stack>
+          <Text fontSize="lg"
+            color={styles.color}
+          >
+            {todo.title}
+          </Text>
+          {isLoading ? (
+            <Spinner size="sm" />
+          ) : error ? (
+            <Text color="red.500">Error loading projects</Text>
+          ) : (
+            <Text fontSize="sm" color='grey'>{project ? project.name : "General"}</Text>
+          )}
+        </Stack>
         <div>
           <Badge ml="1" colorScheme={timeStyles.badgeColor}>
             {timeStyles.badgeText}
