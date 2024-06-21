@@ -10,7 +10,7 @@ const useQuery = () => {
 const ResetPassword = () => {
   const [formData, setFormData] = useState({ password: "", resetToken: "" });
   const query = useQuery();
-  const { resetToken } = query.get("resetToken");
+  const resetToken = query.get("resetToken");
   const navigate = useNavigate();
   const toast = useToast();
 

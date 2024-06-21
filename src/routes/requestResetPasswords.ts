@@ -42,7 +42,6 @@ const resetPasswordRoutes = (client: MongoClient): Router => {
           token: resetToken,
         });
         console.log('Email sent successfully');
-        console.log(resetToken);
       } catch (error) {
         console.error('Error sending email:', error);
       }
@@ -56,7 +55,12 @@ const resetPasswordRoutes = (client: MongoClient): Router => {
 
   // Endpoint to reset password with a valid reset token
   router.post('/reset', async (req: Request, res: Response) => {
-    const { resetToken, newPassword } = req.body;
+    const { resetToken, password: newPassword } = req.body;
+
+    if (!resetToken || !newPassword) {
+      console.log('Reset token and new password are required');
+      return res.status(400).json({ message: 'Reset token and new password are required' });
+    }
 
     try {
       const user = await db.collection('users').findOne({
@@ -65,9 +69,11 @@ const resetPasswordRoutes = (client: MongoClient): Router => {
       });
 
       if (!user) {
+        console.log('Invalid or expired reset token');
         return res.status(400).json({ message: 'Invalid or expired reset token' });
       }
 
+      console.log('Reset token valid for user:', user.email);
       // Hash the new password
       const hashedPassword = await bcrypt.hash(newPassword, 10);
 
