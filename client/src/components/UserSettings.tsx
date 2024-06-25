@@ -1,41 +1,18 @@
 import { useState, useEffect } from "react";
-import { Stack, Button, RadioGroup, Radio, useToast } from "@chakra-ui/react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Stack, Button, useToast } from "@chakra-ui/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
-import { ObjectId } from 'mongodb';
 import TimeSelect from "./TimeSelect";
 import PrioritySelect from "./PrioritySelect";
+import { useSettingsQuery } from "../hooks/useSettings";
 
-interface UserSettingsData {
-  _id?: ObjectId;
-  userId: ObjectId;
-  defaultTime: number;
-  defaultPriority: string;
-}
 
 const UserSettings = ({ token }: { token: string }) => {
   const [defaultTime, setDefaultTime] = useState<string>("");
   const [defaultPriority, setDefaultPriority] = useState<string>("");
   const toast = useToast();
   const queryClient = useQueryClient();
-
-  const { data: settings, isLoading: isLoading } = useQuery<UserSettingsData>({
-    queryKey: ["userSettings"],
-    queryFn: async () => {
-      const res = await fetch(BASE_URL + "/user-settings", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Something went wrong");
-      }
-      return data;
-    },
-  });
+  const { data: settings, isLoading, error } = useSettingsQuery(token);
 
   useEffect(() => {
     if (settings) {
@@ -74,7 +51,7 @@ const UserSettings = ({ token }: { token: string }) => {
       });
       queryClient.invalidateQueries({ queryKey: ["userSettings"] });
     },
-    onError: (error: any) => {
+    onError: (error) => {
       toast({
         title: "Error updating settings.",
         description: error.message,

@@ -10,6 +10,7 @@ const TimeSelect = ({ value, onChange }: TimeSelectProps) => {
     <RadioGroup
       value={value}
       onChange={onChange}
+      colorScheme="teal"
     >
       <Stack spacing={5} direction={'row'}>
         <Radio value="15">15m</Radio>

@@ -1,4 +1,4 @@
-import { Button, Flex, Input, Spinner, useToast, TabList, Tab, TabPanels, TabPanel, Tabs } from "@chakra-ui/react";
+import { Button, Flex, Input, Spinner, useToast, TabList, Tab, TabPanels, TabPanel, Tabs, Text } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useRef, useEffect } from "react";
 import { IoMdAdd } from "react-icons/io";
@@ -6,20 +6,31 @@ import { BASE_URL } from "../App";
 import ProjectSelector from "./ProjectSelector";
 import TimeSelect from "./TimeSelect";
 import PrioritySelect from "./PrioritySelect";
+import { useSettingsQuery } from "../hooks/useSettings";
 
 interface TodoFormProps {
   token: string;
 }
 
 const TodoForm = ({ token }: TodoFormProps) => {
+  const { data: settings, isLoading, error } = useSettingsQuery(token);
+  console.log(settings);
   const [newTodo, setNewTodo] = useState("");
-  const [newTime, setNewTime] = useState("15");
-  const [newPriority, setNewPriority] = useState("medium");
+  const [newTime, setNewTime] = useState<string | undefined>(undefined);
+  const [newPriority, setNewPriority] = useState<string | undefined>(undefined);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const queryClient = useQueryClient();
   const toast = useToast();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isCreated, setIsCreated] = useState(false);
+
+  useEffect(() => {
+    if (settings) {
+      console.log(settings)
+      setNewTime(settings[0].defaultTime ? settings[0].defaultTime.toString() : "15");
+      setNewPriority(settings[0].defaultPriority || "medium");
+    }
+  }, [settings]);
 
   const { mutate: createTodo, isPending: isCreating } = useMutation({
     mutationKey: ['createTodo'],
@@ -78,6 +89,25 @@ const TodoForm = ({ token }: TodoFormProps) => {
     }
   }, [isCreated]);
 
+  if (isLoading) {
+    return (
+      <Flex justify="center" align="center" height="100vh">
+        <Spinner size="xl" />
+      </Flex>
+    );
+  }
+
+  if (error) {
+    return (
+      <Flex justify="center" align="center" height="100vh">
+        <Text color="red.500">Failed to load settings</Text>
+      </Flex>
+    );
+  }
+
+  if (!settings) {
+    return null;
+  }
   return (
     <form onSubmit={handleSubmit}>
       <Flex my="1rem" gap={2}>
