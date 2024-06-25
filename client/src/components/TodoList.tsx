@@ -2,6 +2,8 @@ import { Flex, Spinner, Stack, Text } from "@chakra-ui/react";
 import TodoItem from "./TodoItem";
 import { useQuery } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
+import reactLogo from '../assets/react.svg'
+import wooLogo from '../assets/WooSimon Logo DSG.png'
 
 export type Todo = {
   _id: string;
@@ -53,6 +55,16 @@ const TodoList = ({ token }: TodoListProps) => {
           <Text fontSize={"xl"} textAlign={"center"} color={"gray.500"}>
             All tasks completed! 🤞
           </Text>
+          <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
+            <Flex>
+              <a href="https://woosimon.com" target="_blank">
+                <img src={wooLogo} className="logo woo" alt="Woo logo" />
+              </a>
+              <a href="https://react.dev" target="_blank">
+                <img src={reactLogo} className="logo react" alt="React logo" />
+              </a>
+            </Flex>
+          </Flex>
         </Stack>
       )}
       <Stack gap={3}>

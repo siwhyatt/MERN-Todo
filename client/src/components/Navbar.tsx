@@ -17,7 +17,7 @@ const Navbar = ({ logout, token }: NavbarProps) => {
     <Container maxW={"900px"}>
       <Flex bg={useColorModeValue("blue.100", "gray.700")} p={4} my={4} gap={3} borderRadius={5} alignItems={"center"} justifyContent={"space-between"} >
         <Flex>
-          <Button as={RouterLink} to="/todos" color="white" mr={4}>
+          <Button as={RouterLink} to="/" color="white" mr={4}>
             <FaHome />
           </Button>
           <Button as={RouterLink} to="/projects" color="white" mr={4}>

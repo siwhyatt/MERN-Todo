@@ -39,7 +39,7 @@ const LoginForm = ({ setToken }: { setToken: (token: string) => void }) => {
       setToken(data.token);
       setFormData({ email: "", password: "" });
       localStorage.setItem('token', data.token);
-      navigate('/todos');
+      navigate('/');
     },
     onError: (error: any) => {
       toast({

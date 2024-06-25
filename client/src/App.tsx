@@ -29,19 +29,17 @@ function App() {
         <Navbar logout={logout} token={token} />
         <Container >
           <Routes>
-            <Route path="/" element={token ? <Navigate to="/todos" /> : <Navigate to="/login" />} />
             <Route path="/login" element={<LoginPage setToken={setToken} />} />
             <Route path="/reset-password/request" element={<RequestToken />} />
             <Route path="/reset-password/email-sent" element={<EmailSent />} />
             <Route path="/reset-password/" element={<ResetPassword />} />
             <Route element={<PrivateRoute token={token} />}>
-              <Route path="/todos" element={<TodoPage token={token} />} />
+              <Route path="/" element={<TodoPage token={token} />} />
               <Route path="/projects" element={<ProjectsPage token={token} />} />
               <Route path="/user" element={<User token={token} />} />
             </Route>
           </Routes>
         </Container>
-        <Footer />
       </Stack>
     </Router>
   )

@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes';
 import todoRoutes from './routes/todoRoutes';
 import projectRoutes from './routes/projectRoutes';
 import resetPasswordRoutes from './routes/requestResetPasswords';
+import userSettingRoutes from './routes/userSettingRoutes';
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ async function connectDB() {
     app.use('/api/todos', todoRoutes(client));
     app.use('/api/projects', projectRoutes(client));
     app.use('/api/reset-password', resetPasswordRoutes(client));
+    app.use('/api/user-settings', userSettingRoutes(client));
 
     // Sample route
     app.get('/', (req: Request, res: Response) => {
