@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Stack, Button, useToast } from "@chakra-ui/react";
+import { Stack, Button, useToast, Text, Box } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
 import TimeSelect from "./TimeSelect";
@@ -70,8 +70,18 @@ const UserSettings = ({ token }: { token: string }) => {
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={3}>
-        <TimeSelect value={defaultTime} onChange={setDefaultTime} />
-        <PrioritySelect value={defaultPriority} onChange={setDefaultPriority} />
+        <Box p={4} my={3} borderWidth='1px' borderRadius='lg'>
+          <Text mb={1}>
+            Default todo time:
+          </Text>
+          <TimeSelect value={defaultTime} onChange={setDefaultTime} />
+        </Box>
+        <Box p={4} my={3} borderWidth='1px' borderRadius='lg'>
+          <Text mb={1}>
+            Default todo priority:
+          </Text>
+          <PrioritySelect value={defaultPriority} onChange={setDefaultPriority} />
+        </Box>
         <Button type="submit" isLoading={isLoading} colorScheme="teal">
           Save Settings
         </Button>
