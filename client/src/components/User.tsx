@@ -1,4 +1,5 @@
 import { Container, Heading, Text } from "@chakra-ui/react";
+import UserSettings from "./UserSettings";
 
 const User = ({ token }: { token: string }) => {
   return (
@@ -9,7 +10,7 @@ const User = ({ token }: { token: string }) => {
       <Text>
         Manage your user settings here.
       </Text>
-      {/* Add user management logic and UI components here */}
+      <UserSettings token={token} />
     </Container>
   );
 };

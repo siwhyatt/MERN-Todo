@@ -28,18 +28,21 @@ const userSettingRoutes = (client: MongoClient): Router => {
   // Update user settings
   router.put('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
-    const { defaultTime, defaultPriority } = req.body;
     const userId = req.user?.userId;
 
     if (!userId) {
       return res.status(400).json({ message: 'UserId is required' });
     }
 
+    const updateFields: { [key: string]: any } = {};
+    if (req.body.defaultTime !== undefined) updateFields.defaultTime = req.body.defaultTime;
+    if (req.body.defaultPriority !== undefined) updateFields.defaultPriority = req.body.defaultPriority;
+
     try {
       const db = client.db();
       const result = await db.collection('userSettings').updateOne(
         { _id: new ObjectId(id), userId: new ObjectId(userId) },
-        { $set: { defaultTime, defaultPriority } }
+        { $set: updateFields }
       );
 
       if (result.matchedCount === 0) {
