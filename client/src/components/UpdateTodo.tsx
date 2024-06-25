@@ -21,6 +21,8 @@ import {
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ProjectSelector from "./ProjectSelector";
+import TimeSelect from "./TimeSelect";
+import PrioritySelect from "./PrioritySelect";
 
 interface UpdateTodoProps {
   todo: Todo;
@@ -106,27 +108,8 @@ const UpdateTodo = ({ todo, token }: UpdateTodoProps) => {
                   placeholder="New title?"
                 >
                 </Input>
-                <RadioGroup
-                  value={newTime}
-                  onChange={setNewTime}
-                >
-                  <Stack spacing={5} direction="row">
-                    <Radio value="15">15m</Radio>
-                    <Radio value="30">30m</Radio>
-                    <Radio value="60">1h</Radio>
-                    <Radio value="120">2h</Radio>
-                  </Stack>
-                </RadioGroup>
-                <RadioGroup
-                  value={newPriority}
-                  onChange={setNewPriority}
-                >
-                  <Stack spacing={5} direction="row">
-                    <Radio size='lg' value="low" colorScheme='blue'>Low</Radio>
-                    <Radio size='lg' value="medium" colorScheme='green'>Med</Radio>
-                    <Radio size='lg' value="high" colorScheme='red'>High</Radio>
-                  </Stack>
-                </RadioGroup>
+                <TimeSelect value={newTime} onChange={setNewTime} />
+                <PrioritySelect value={newPriority} onChange={setNewPriority} />
                 <ProjectSelector
                   token={token}
                   onProjectSelect={setSelectedProjectId}

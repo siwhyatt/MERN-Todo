@@ -3,6 +3,8 @@ import { Stack, Button, RadioGroup, Radio, useToast } from "@chakra-ui/react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
 import { ObjectId } from 'mongodb';
+import TimeSelect from "./TimeSelect";
+import PrioritySelect from "./PrioritySelect";
 
 interface UserSettingsData {
   _id?: ObjectId;
@@ -91,27 +93,8 @@ const UserSettings = ({ token }: { token: string }) => {
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={3}>
-        <RadioGroup
-          value={defaultTime}
-          onChange={setDefaultTime}
-        >
-          <Stack spacing={5} direction="row">
-            <Radio value="15">15m</Radio>
-            <Radio value="30">30m</Radio>
-            <Radio value="60">1h</Radio>
-            <Radio value="120">2h</Radio>
-          </Stack>
-        </RadioGroup>
-        <RadioGroup
-          value={defaultPriority}
-          onChange={setDefaultPriority}
-        >
-          <Stack spacing={5} direction="row">
-            <Radio size='lg' value="low" colorScheme='blue'>Low</Radio>
-            <Radio size='lg' value="medium" colorScheme='green'>Med</Radio>
-            <Radio size='lg' value="high" colorScheme='red'>High</Radio>
-          </Stack>
-        </RadioGroup>
+        <TimeSelect value={defaultTime} onChange={setDefaultTime} />
+        <PrioritySelect value={defaultPriority} onChange={setDefaultPriority} />
         <Button type="submit" isLoading={isLoading} colorScheme="teal">
           Save Settings
         </Button>

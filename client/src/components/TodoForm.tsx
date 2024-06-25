@@ -1,9 +1,11 @@
-import { Button, Flex, Input, Spinner, RadioGroup, Radio, Stack, useToast, TabList, Tab, TabPanels, TabPanel, Tabs } from "@chakra-ui/react";
+import { Button, Flex, Input, Spinner, useToast, TabList, Tab, TabPanels, TabPanel, Tabs } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useRef, useEffect } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { BASE_URL } from "../App";
-import ProjectSelector from "./ProjectSelector"; // Import the new component
+import ProjectSelector from "./ProjectSelector";
+import TimeSelect from "./TimeSelect";
+import PrioritySelect from "./PrioritySelect";
 
 interface TodoFormProps {
   token: string;
@@ -95,7 +97,7 @@ const TodoForm = ({ token }: TodoFormProps) => {
           {isCreating ? <Spinner size={"xs"} /> : <IoMdAdd size={30} />}
         </Button>
       </Flex>
-      <Tabs variant='soft-rounded' colorScheme='blue'>
+      <Tabs variant='soft-rounded' colorScheme='teal'>
         <TabList>
           <Tab>Time</Tab>
           <Tab>Priority</Tab>
@@ -103,29 +105,10 @@ const TodoForm = ({ token }: TodoFormProps) => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <RadioGroup
-              value={newTime}
-              onChange={setNewTime}
-            >
-              <Stack spacing={5} direction={'row'}>
-                <Radio value="15">15m</Radio>
-                <Radio value="30">30m</Radio>
-                <Radio value="60">1h</Radio>
-                <Radio value="120">2h</Radio>
-              </Stack>
-            </RadioGroup>
+            <TimeSelect value={newTime} onChange={setNewTime} />
           </TabPanel>
           <TabPanel>
-            <RadioGroup
-              value={newPriority}
-              onChange={setNewPriority}
-            >
-              <Stack spacing={5} direction="row">
-                <Radio size='lg' value="low" colorScheme='blue'>Low</Radio>
-                <Radio size='lg' value="medium" colorScheme='green'>Med</Radio>
-                <Radio size='lg' value="high" colorScheme='red'>High</Radio>
-              </Stack>
-            </RadioGroup>
+            <PrioritySelect value={newPriority} onChange={setNewPriority} />
           </TabPanel>
           <TabPanel>
             <ProjectSelector
