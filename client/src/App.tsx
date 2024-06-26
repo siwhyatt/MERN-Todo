@@ -1,9 +1,8 @@
 import './App.css'
-import { Stack, Container } from '@chakra-ui/react'
+import { Stack, Container, Spinner, Center, useColorModeValue } from '@chakra-ui/react'
 import Navbar from './components/Navbar'
 import { useState, useEffect } from 'react'
-import Footer from './components/Footer'
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import TodoPage from './components/TodoPage'
 import ProjectsPage from './components/ProjectsPage'
 import User from './components/User'
@@ -16,16 +15,32 @@ import ResetPassword from './components/ResetPassword'
 export const BASE_URL = "http://localhost:5000/api"
 
 function App() {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
+  const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const bgColor = useColorModeValue("gray.100", "gray.800");
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    setToken(storedToken);
+    setLoading(false);
+  }, []);
 
   const logout = () => {
     setToken(null);
     localStorage.removeItem('token');
   };
 
+  if (loading) {
+    return (
+      <Center h="100vh">
+        <Spinner size="xl" />
+      </Center>
+    );
+  }
+
   return (
     <Router>
-      <Stack h="100vh" >
+      <Stack bg={bgColor} h="100vh" >
         <Navbar logout={logout} token={token} />
         <Container >
           <Routes>
@@ -40,7 +55,6 @@ function App() {
             </Route>
           </Routes>
         </Container>
-        <Footer />
       </Stack>
     </Router>
   )

@@ -108,7 +108,7 @@ const ProjectSelector = ({ token, onProjectSelect, initialProjectId = null }: Pr
   return (
     <Flex>
       <Input
-        placeholder="Project name"
+        placeholder="Project name (optional)"
         value={newProject}
         onChange={handleProjectChange}
         list="project-options"

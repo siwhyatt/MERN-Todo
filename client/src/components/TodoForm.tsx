@@ -1,4 +1,4 @@
-import { Button, Flex, Input, Spinner, useToast, TabList, Tab, TabPanels, TabPanel, Tabs, Text } from "@chakra-ui/react";
+import { Flex, Input, Spinner, useToast, TabList, Tab, TabPanels, TabPanel, Tabs, Text, Box, InputGroup, InputRightElement } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useRef, useEffect } from "react";
 import { IoMdAdd } from "react-icons/io";
@@ -53,8 +53,6 @@ const TodoForm = ({ token }: TodoFormProps) => {
           throw new Error(data.error || "Something went wrong");
         }
 
-        setNewTodo("");
-        setIsCreated(true);
         return data;
       } catch (error: any) {
         throw new Error(error);
@@ -62,6 +60,8 @@ const TodoForm = ({ token }: TodoFormProps) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
+      setNewTodo("");
+      setIsCreated(true);
       toast({
         title: "Todo added successfully.",
         description: "You have one more thing to do!",
@@ -81,9 +81,19 @@ const TodoForm = ({ token }: TodoFormProps) => {
   };
 
   useEffect(() => {
-    if (isCreated && inputRef.current) {
-      inputRef.current.focus();
-      setIsCreated(false); // Reset the flag after focusing
+    const focusInput = () => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    };
+
+    // Focus on initial mount
+    focusInput();
+
+    // Focus after successful todo creation
+    if (isCreated) {
+      focusInput();
+      setIsCreated(false);
     }
   }, [isCreated]);
 
@@ -108,24 +118,29 @@ const TodoForm = ({ token }: TodoFormProps) => {
   }
   return (
     <form onSubmit={handleSubmit}>
-      <Flex my="1rem" gap={2}>
-        <Input
-          type='text'
-          value={newTodo}
-          onChange={(e) => setNewTodo(e.target.value)}
-          ref={inputRef}
-        />
-        <Button
-          mx={2}
-          type='submit'
-          _active={{
-            transform: "scale(.97)",
-          }}
-        >
-          {isCreating ? <Spinner size={"xs"} /> : <IoMdAdd size={30} />}
-        </Button>
-      </Flex>
-      <Tabs variant='soft-rounded' colorScheme='teal'>
+      <Box my="1rem" gap={2}>
+        <InputGroup>
+          <Input
+            type='text'
+            value={newTodo}
+            onChange={(e) => setNewTodo(e.target.value)}
+            ref={inputRef}
+            autoFocus
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSubmit(e);
+              }
+            }}
+          />
+          <InputRightElement>
+            <Box onClick={handleSubmit} cursor="pointer">
+              {isCreating ? <Spinner size={"xs"} /> : <IoMdAdd size={30} />}
+            </Box>
+          </InputRightElement>
+        </InputGroup>
+      </Box>
+      <Tabs align='center' variant='soft-rounded' colorScheme='teal'>
         <TabList>
           <Tab>Time</Tab>
           <Tab>Priority</Tab>

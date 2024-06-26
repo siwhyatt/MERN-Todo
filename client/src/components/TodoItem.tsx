@@ -221,20 +221,17 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
                 {styles.badgeText}
               </Badge>
             </div>
-            {isMobile && (
+            <Flex align={'center'}>
               <UpdateTodo key={todo._id} todo={todo} token={token} />
-            )}
+              {!isMobile &&
+                <Box color={"red.500"} cursor={"pointer"} onClick={() => deleteTodo()}>
+                  {!isDeleting && <MdDelete size={25} />}
+                  {isDeleting && <Spinner size={"sm"} />}
+                </Box>
+              }
+            </Flex>
           </Stack>
         </Flex>
-        {!isMobile && (
-          <Flex gap={2} alignItems={"center"} flexDirection={{ base: "column", md: "row" }}>
-            <UpdateTodo key={todo._id} todo={todo} token={token} />
-            <Box color={"red.500"} cursor={"pointer"} onClick={() => deleteTodo()}>
-              {!isDeleting && <MdDelete size={25} />}
-              {isDeleting && <Spinner size={"sm"} />}
-            </Box>
-          </Flex>
-        )}
       </Flex>
     </Box >
   );

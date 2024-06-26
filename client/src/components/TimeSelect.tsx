@@ -12,7 +12,7 @@ const TimeSelect = ({ value, onChange }: TimeSelectProps) => {
       onChange={onChange}
       colorScheme="teal"
     >
-      <Stack spacing={5} direction={'row'}>
+      <Stack spacing={5} direction={'row'} justify={'center'}>
         <Radio value="15">15m</Radio>
         <Radio value="30">30m</Radio>
         <Radio value="60">1h</Radio>

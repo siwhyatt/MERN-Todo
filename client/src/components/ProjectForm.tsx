@@ -1,4 +1,4 @@
-import { Button, Flex, Input, Spinner, Stack, useToast } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, InputGroup, InputRightElement, Spinner, Stack, useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useRef, useEffect } from "react";
 import { IoMdAdd } from "react-icons/io";
@@ -55,7 +55,7 @@ const ProjectForm = ({ token }: ProjectFormProps) => {
         isClosable: true,
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       alert(error.message);
     }
   });
@@ -76,30 +76,40 @@ const ProjectForm = ({ token }: ProjectFormProps) => {
     <form onSubmit={handleSubmit}>
       <Flex mb="2rem" gap={2}>
         <Stack w="100%" gap={2}>
-          <Input
-            type='text'
-            value={newProject}
-            onChange={(e) => setNewProject(e.target.value)}
-            ref={inputRef}
-            placeholder="Project Name"
-            autoFocus={true}
-          />
+          <InputGroup>
+            <Input
+              type='text'
+              value={newProject}
+              onChange={(e) => setNewProject(e.target.value)}
+              ref={inputRef}
+              placeholder="Project Name"
+              autoFocus={true}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleSubmit(e);
+                }
+              }}
+            />
+            <InputRightElement>
+              <Box onClick={handleSubmit} cursor="pointer">
+                {isCreating ? <Spinner size={"xs"} /> : <IoMdAdd size={30} />}
+              </Box>
+            </InputRightElement>
+          </InputGroup>
           <Input
             type='text'
             value={newDescription}
             onChange={(e) => setNewDescription(e.target.value)}
             placeholder="Project Description (optional)"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSubmit(e);
+              }
+            }}
           />
         </Stack>
-        <Button
-          mx={2}
-          type='submit'
-          _active={{
-            transform: "scale(.97)",
-          }}
-        >
-          {isCreating ? <Spinner size={"xs"} /> : <IoMdAdd size={30} />}
-        </Button>
       </Flex>
     </form>
   );

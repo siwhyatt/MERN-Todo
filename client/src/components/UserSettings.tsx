@@ -16,7 +16,6 @@ const UserSettings = ({ token }: { token: string }) => {
 
   useEffect(() => {
     if (settings) {
-      console.log(settings)
       setDefaultTime(settings[0].defaultTime?.toString() || "15");
       setDefaultPriority(settings[0].defaultPriority || "medium");
     }
@@ -79,13 +78,13 @@ const UserSettings = ({ token }: { token: string }) => {
     <form onSubmit={handleSubmit}>
       <Stack spacing={3}>
         <Box p={4} my={3} borderWidth='1px' borderRadius='lg'>
-          <Text mb={1}>
+          <Text align={'center'} mb={2}>
             Default todo time:
           </Text>
           <TimeSelect value={defaultTime} onChange={setDefaultTime} />
         </Box>
         <Box p={4} my={3} borderWidth='1px' borderRadius='lg'>
-          <Text mb={1}>
+          <Text align={'center'} mb={2}>
             Default todo priority:
           </Text>
           <PrioritySelect value={defaultPriority} onChange={setDefaultPriority} />

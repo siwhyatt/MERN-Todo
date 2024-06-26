@@ -11,7 +11,7 @@ const PrioritySelect = ({ value, onChange }: PrioritySelectProps) => {
       value={value}
       onChange={onChange}
     >
-      <Stack spacing={5} direction={'row'}>
+      <Stack spacing={5} direction={'row'} justify={'center'}>
         <Radio size='lg' value="low" colorScheme='blue'>Low</Radio>
         <Radio size='lg' value="medium" colorScheme='green'>Med</Radio>
         <Radio size='lg' value="high" colorScheme='red'>High</Radio>
