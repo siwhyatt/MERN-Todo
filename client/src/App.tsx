@@ -1,7 +1,7 @@
 import './App.css'
 import { Stack, Container } from '@chakra-ui/react'
 import Navbar from './components/Navbar'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Footer from './components/Footer'
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import TodoPage from './components/TodoPage'
@@ -40,6 +40,7 @@ function App() {
             </Route>
           </Routes>
         </Container>
+        <Footer />
       </Stack>
     </Router>
   )

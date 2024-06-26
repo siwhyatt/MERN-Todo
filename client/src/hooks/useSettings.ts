@@ -9,7 +9,7 @@ export type Settings = {
 }
 
 export const useSettingsQuery = (token: string) => {
-  return useQuery<Settings[], Error>({
+  return useQuery<Settings, Error>({
     queryKey: ["settings"],
     queryFn: async () => {
       try {
@@ -26,7 +26,8 @@ export const useSettingsQuery = (token: string) => {
         }
         return data;
       } catch (error) {
-        console.log(error);
+        console.error(error);
+        throw error;
       }
     },
   });

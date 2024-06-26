@@ -14,7 +14,6 @@ interface TodoFormProps {
 
 const TodoForm = ({ token }: TodoFormProps) => {
   const { data: settings, isLoading, error } = useSettingsQuery(token);
-  console.log(settings);
   const [newTodo, setNewTodo] = useState("");
   const [newTime, setNewTime] = useState<string | undefined>(undefined);
   const [newPriority, setNewPriority] = useState<string | undefined>(undefined);
@@ -26,7 +25,6 @@ const TodoForm = ({ token }: TodoFormProps) => {
 
   useEffect(() => {
     if (settings) {
-      console.log(settings)
       setNewTime(settings[0].defaultTime ? settings[0].defaultTime.toString() : "15");
       setNewPriority(settings[0].defaultPriority || "medium");
     }

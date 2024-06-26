@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Stack, Button, useToast, Text, Box } from "@chakra-ui/react";
+import { Stack, Button, useToast, Text, Box, Spinner } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
 import TimeSelect from "./TimeSelect";
@@ -16,6 +16,7 @@ const UserSettings = ({ token }: { token: string }) => {
 
   useEffect(() => {
     if (settings) {
+      console.log(settings)
       setDefaultTime(settings[0].defaultTime?.toString() || "15");
       setDefaultPriority(settings[0].defaultPriority || "medium");
     }
@@ -23,7 +24,10 @@ const UserSettings = ({ token }: { token: string }) => {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch(BASE_URL + `/user-settings/${settings[0]?._id}`, {
+      if (!settings || !settings[0]._id) {
+        throw new Error("Settings not loaded");
+      }
+      const res = await fetch(BASE_URL + `/user-settings/${settings[0]._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +55,7 @@ const UserSettings = ({ token }: { token: string }) => {
       });
       queryClient.invalidateQueries({ queryKey: ["userSettings"] });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: "Error updating settings.",
         description: error.message,
@@ -66,6 +70,10 @@ const UserSettings = ({ token }: { token: string }) => {
     e.preventDefault();
     mutation.mutate();
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <form onSubmit={handleSubmit}>
@@ -82,7 +90,7 @@ const UserSettings = ({ token }: { token: string }) => {
           </Text>
           <PrioritySelect value={defaultPriority} onChange={setDefaultPriority} />
         </Box>
-        <Button type="submit" isLoading={isLoading} colorScheme="teal">
+        <Button type="submit" isLoading={mutation.isPending} colorScheme="teal">
           Save Settings
         </Button>
       </Stack>
