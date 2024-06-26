@@ -11,6 +11,7 @@ import PrivateRoute from './components/PrivateRoute'
 import RequestToken from './components/RequestToken'
 import EmailSent from './components/EmailSent'
 import ResetPassword from './components/ResetPassword'
+import { Helmet } from 'react-helmet';
 
 export const BASE_URL = "http://localhost:5000/api"
 
@@ -40,6 +41,11 @@ function App() {
 
   return (
     <Router>
+      <Helmet>
+        <html lang="en" />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Helmet>
       <Stack bg={bgColor} h="100vh" >
         <Navbar logout={logout} token={token} />
         <Container >
