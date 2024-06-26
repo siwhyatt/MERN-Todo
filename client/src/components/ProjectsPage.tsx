@@ -8,7 +8,7 @@ interface ProjectPageProps {
 
 const Projects = ({ token }: ProjectPageProps) => {
   return (
-    <Container>
+    <>
       <Heading as="h2" size="lg" mb={4}>
         Add New Project:
       </Heading>
@@ -17,7 +17,7 @@ const Projects = ({ token }: ProjectPageProps) => {
         Edit Projects:
       </Heading>
       <ProjectList token={token} />
-    </Container>
+    </>
   );
 };
 

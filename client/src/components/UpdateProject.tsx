@@ -78,7 +78,7 @@ const UpdateProject = ({ project, token }: UpdateProjectProps) => {
 
   return (
     <>
-      <Box color={"green.500"} cursor={"pointer"} onClick={onOpen}>
+      <Box color={"teal"} cursor={"pointer"} onClick={onOpen}>
         <FaEdit size={20} />
       </Box>
 

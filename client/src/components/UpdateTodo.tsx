@@ -14,9 +14,7 @@ import {
   Button,
   Input,
   useToast,
-  RadioGroup,
   Stack,
-  Radio,
 } from '@chakra-ui/react'
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -87,7 +85,7 @@ const UpdateTodo = ({ todo, token }: UpdateTodoProps) => {
 
   return (
     <>
-      <Box color={"green.500"} cursor={"pointer"} onClick={onOpen}>
+      <Box color={"teal"} cursor={"pointer"} onClick={onOpen}>
         <FaEdit size={20} />
       </Box>
 

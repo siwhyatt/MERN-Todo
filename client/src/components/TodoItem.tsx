@@ -155,7 +155,7 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
         bottom={0}
         left={0}
         right={0}
-        bg="red.500"
+        bg="red"
         style={{
           opacity: Math.min(Math.abs(swipeOffset) / DELETION_THRESHOLD, 1),
           transition: 'opacity 0.2s ease-out',

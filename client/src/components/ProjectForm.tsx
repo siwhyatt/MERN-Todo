@@ -83,7 +83,7 @@ const ProjectForm = ({ token }: ProjectFormProps) => {
               onChange={(e) => setNewProject(e.target.value)}
               ref={inputRef}
               placeholder="Project Name"
-              autoFocus={true}
+              autoFocus
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
