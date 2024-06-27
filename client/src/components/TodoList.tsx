@@ -1,9 +1,11 @@
-import { Flex, Spinner, Stack, Text } from "@chakra-ui/react";
+import { Flex, Spinner, Stack, Text, Link, Box, HStack } from "@chakra-ui/react";
 import TodoItem from "./TodoItem";
 import { useQuery } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
 import reactLogo from '../assets/react.svg'
-import wooLogo from '../assets/WooSimon Logo DSG.png'
+import nodeLogo from '../assets/node.png'
+import expressLogo from '../assets/express-js.png'
+import mongoDbLogo from '../assets/mongodb.png'
 import { useMemo } from "react";
 import { SortFunction, Todo } from '../utils/sortFunctions';
 
@@ -53,16 +55,40 @@ const TodoList = ({ token, sortFunction }: TodoListProps) => {
           <Text fontSize={"xl"} textAlign={"center"} color={"gray.500"}>
             All tasks completed! 🤞
           </Text>
-          <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-            <Flex>
-              <a href="https://woosimon.com" target="_blank">
-                <img src={wooLogo} className="logo woo" alt="Woo logo" />
+          <Text fontSize={"xl"} textAlign={"center"} color={"gray.500"}>
+            Go have a coffee ☕️
+          </Text>
+          <Text fontSize={"xl"} textAlign={"center"} color={"gray.500"}>
+            This app was built by Simon - Freelance Full Stack developer at {' '}
+            <Link color='teal.500' href="https://fullstack.cat" isExternal>
+              FullStack.Cat
+            </Link>
+          </Text>
+          <Text fontSize={"xl"} textAlign={"center"} color={"gray.500"}>
+            Made with MERN Stack: React, Express, NodeJS and MongoDB
+          </Text>
+          <HStack h={16} alignItems={"center"} justifyContent={"space-between"}>
+            <Box h={16}>
+              <a href="https://nodejs.org/en/about.com" target="_blank">
+                <img src={nodeLogo} alt="Node logo" height="50px" />
               </a>
+            </Box>
+            <Box h={16}>
+              <a href="https://expressjs.com/" target="_blank">
+                <img src={expressLogo} alt="Express logo" height="50px" />
+              </a>
+            </Box>
+            <Box h={16}>
+              <a href="https://www.mongodb.com/" target="_blank">
+                <img src={mongoDbLogo} alt="MongoDb logo" height="50px" />
+              </a>
+            </Box>
+            <Box h={16}>
               <a href="https://react.dev" target="_blank">
-                <img src={reactLogo} className="logo react" alt="React logo" />
+                <img src={reactLogo} className="logo react" alt="React logo" height="50px" />
               </a>
-            </Flex>
-          </Flex>
+            </Box>
+          </HStack>
         </Stack>
       )}
       <Stack gap={3}>

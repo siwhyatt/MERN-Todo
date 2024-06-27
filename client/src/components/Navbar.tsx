@@ -22,7 +22,6 @@ const Navbar = ({ logout, token }: NavbarProps) => {
       position="sticky"
       top={0}
       zIndex="sticky"
-      bg="gray.800"
       color="white"
     >
       <Container maxW={"900px"}>

@@ -1,13 +1,13 @@
 import { Badge, Stack, Box, Flex, Spinner, Text, useToast, useColorMode, useColorModeValue } from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
-import { Todo } from "./TodoList";
+import { Todo } from "../utils/sortFunctions.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
 import UpdateTodo from "./UpdateTodo.tsx"
 import { useProjectsQuery } from "../hooks/useProjects";
 import { useSwipeable } from 'react-swipeable';
 import { useMediaQuery } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const usePriorityStyles = () => {
   const { colorMode } = useColorMode();
@@ -79,8 +79,11 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
   const [swipeOffset, setSwipeOffset] = useState(0);
   const DELETION_THRESHOLD = window.innerWidth / 2;
   const bgColor = useColorModeValue("white", "gray.800");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteAnimation, setDeleteAnimation] = useState(false);
+  const todoRef = useRef<HTMLDivElement>(null);
 
-  const { mutate: deleteTodo, isPending: isDeleting } = useMutation({
+  const { mutate: deleteTodo, isPending: isDeletePending } = useMutation({
     mutationKey: ["deleteTodo"],
     mutationFn: async () => {
       try {
@@ -100,6 +103,10 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
         console.log(error);
       }
     },
+    onMutate: () => {
+      setIsDeleting(true);
+      setDeleteAnimation(true);
+    },
     onSuccess: () => {
       toast({
         title: "Todo deleted.",
@@ -110,34 +117,57 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
       });
       queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
+    onSettled: () => {
+      // Start collapsing the todo item
+      if (todoRef.current) {
+        todoRef.current.style.height = '0px';
+        todoRef.current.style.opacity = '0';
+      }
+      // Wait for the collapse animation to finish before updating the cache
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["todos"] });
+        setIsDeleting(false);
+        setDeleteAnimation(false);
+      }, 300);
+    },
   });
+
+  const handleDelete = () => {
+    setIsDeleting(true);
+    setDeleteAnimation(true);
+    setTimeout(() => {
+      deleteTodo();
+    }, 300); // Adjust this timing to match your animation duration
+  };
 
   const handlers = useSwipeable({
     onSwiping: (eventData) => {
-      if (isMobile) {
+      if (isMobile && !isDeleting) {
         setSwipeOffset(eventData.deltaX);
       }
     },
     onSwipedLeft: (eventData) => {
-      if (isMobile) {
+      if (isMobile && !isDeleting) {
         if (Math.abs(eventData.deltaX) >= DELETION_THRESHOLD) {
-          deleteTodo();
+          handleDelete();
         } else {
           setSwipeOffset(0);
         }
       }
     },
     onSwipedRight: (eventData) => {
-      if (isMobile) {
+      if (isMobile && !isDeleting) {
         if (Math.abs(eventData.deltaX) >= DELETION_THRESHOLD) {
-          deleteTodo();
+          handleDelete();
         } else {
           setSwipeOffset(0);
         }
       }
     },
     onTouchEndOrOnMouseUp: () => {
-      setSwipeOffset(0);
+      if (!isDeleting) {
+        setSwipeOffset(0);
+      }
     },
     trackMouse: true,
     trackTouch: true,
@@ -148,20 +178,25 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
   const borderColor = useColorModeValue("gray.100", "gray.600")
 
   return (
-    <Box position="relative">
-      {/* Background color box */}
+    <Box
+      ref={todoRef}
+      position="relative"
+      height="auto"
+      overflow="hidden"
+      transition="height 0.3s ease-out, opacity 0.3s ease-out"
+    >
       <Box
         position="absolute"
         top={0}
         bottom={0}
         left={0}
         right={0}
-        bg="red"
+        bg="red.500"
         style={{
           opacity: Math.min(Math.abs(swipeOffset) / DELETION_THRESHOLD, 1),
           transition: 'opacity 0.2s ease-out',
         }}
-        zIndex={-1}
+        zIndex={0}
       />
       {isMobile && (
         <Text
@@ -185,8 +220,11 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
         bg={bgColor}
         borderRadius={"lg"}
         style={{
-          transform: `translateX(${Math.max(Math.min(swipeOffset, DELETION_THRESHOLD), -DELETION_THRESHOLD)}px)`,
-          transition: 'transform 0.2s ease-out',
+          transform: deleteAnimation
+            ? `translateX(${swipeOffset < 0 ? '-' : ''}100%)`
+            : `translateX(${Math.max(Math.min(swipeOffset, DELETION_THRESHOLD), -DELETION_THRESHOLD)}px)`,
+          transition: 'transform 0.3s ease-out',
+          opacity: isDeleting ? 0 : 1,
         }}
       >
         <Flex
@@ -226,14 +264,25 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
               <UpdateTodo key={todo._id} todo={todo} token={token} />
               {!isMobile &&
                 <Box color={"red.500"} cursor={"pointer"} onClick={() => deleteTodo()}>
-                  {!isDeleting && <MdDelete size={25} />}
-                  {isDeleting && <Spinner size={"sm"} />}
+                  {!isDeletePending && <MdDelete size={25} />}
+                  {isDeletePending && <Spinner size={"sm"} />}
                 </Box>
               }
             </Flex>
           </Stack>
         </Flex>
       </Flex>
+      {isDeleting && (
+        <Box
+          position="absolute"
+          top="50%"
+          left="50%"
+          transform="translate(-50%, -50%)"
+          zIndex={2}
+        >
+          <Spinner size="xl" />
+        </Box>
+      )}
     </Box >
   );
 };

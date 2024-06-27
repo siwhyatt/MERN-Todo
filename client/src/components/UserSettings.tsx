@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Stack, Button, useToast, Text, Box, Spinner } from "@chakra-ui/react";
+import { Stack, Button, useToast, Text, Box, Spinner, useColorModeValue } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
 import TimeSelect from "./TimeSelect";
@@ -77,13 +77,13 @@ const UserSettings = ({ token }: { token: string }) => {
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={3}>
-        <Box p={4} my={3} borderWidth='1px' borderRadius='lg'>
+        <Box bg={useColorModeValue("gray.300", "gray.700")} p={4} my={3} borderWidth='1px' borderRadius='lg'>
           <Text align={'center'} mb={2}>
             Default todo time:
           </Text>
           <TimeSelect value={defaultTime} onChange={setDefaultTime} />
         </Box>
-        <Box p={4} my={3} borderWidth='1px' borderRadius='lg'>
+        <Box bg={useColorModeValue("gray.300", "gray.700")} p={4} my={3} borderWidth='1px' borderRadius='lg'>
           <Text align={'center'} mb={2}>
             Default todo priority:
           </Text>

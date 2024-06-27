@@ -25,17 +25,23 @@ const TodoForm = ({ token, focusAddInput, setFocusAddInput }: TodoFormProps) => 
   const toast = useToast();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const isMobile = useIsMobile();
+  const [shouldFocus, setShouldFocus] = useState(false);
 
   useEffect(() => {
-    if (!isMobile) {
-      // Auto-focus on desktop
+    // Delay focus check to ensure isMobile has been properly set
+    const timer = setTimeout(() => {
+      setShouldFocus(!isMobile);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [isMobile]);
+
+  useEffect(() => {
+    if (shouldFocus || focusAddInput) {
       inputRef.current?.focus();
-    } else if (focusAddInput) {
-      // Focus on mobile only when focusAddInput is true
-      inputRef.current?.focus();
-      setFocusAddInput(false); // Reset the focus trigger
+      setFocusAddInput(false);
     }
-  }, [isMobile, focusAddInput, setFocusAddInput]);
+  }, [shouldFocus, focusAddInput, setFocusAddInput]);
 
   useEffect(() => {
     if (settings) {
@@ -130,7 +136,7 @@ const TodoForm = ({ token, focusAddInput, setFocusAddInput }: TodoFormProps) => 
             value={newTodo}
             onChange={(e) => setNewTodo(e.target.value)}
             ref={inputRef}
-            autoFocus
+            placeholder="Add a new todo"
           />
           <InputRightElement>
             <Box onClick={handleSubmit} cursor="pointer">

@@ -6,13 +6,8 @@ const useIsMobile = () => {
 
   useEffect(() => {
     const checkIsMobile = () => {
-      // Check if the device has touch capability
-      const hasTouchScreen = navigator.maxTouchPoints > 0 ||
-        (navigator as any).msMaxTouchPoints > 0;
-
-      // Check if the screen is relatively small (you can adjust this threshold)
-      const isSmallScreen = window.innerWidth <= 768;
-
+      const hasTouchScreen = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+      const isSmallScreen = window.innerWidth <= 768; // You can adjust this threshold
       return hasTouchScreen && isSmallScreen;
     };
 
@@ -20,13 +15,9 @@ const useIsMobile = () => {
       setIsMobile(checkIsMobile());
     };
 
-    // Set initial value
-    handleResize();
-
-    // Add event listener for window resize
+    handleResize(); // Set initial value
     window.addEventListener('resize', handleResize);
 
-    // Cleanup
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
