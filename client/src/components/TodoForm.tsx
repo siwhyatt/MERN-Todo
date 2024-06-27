@@ -1,12 +1,13 @@
 import { Flex, Input, Spinner, useToast, TabList, Tab, TabPanels, TabPanel, Tabs, Text, Box, InputGroup, InputRightElement } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState, useRef, useEffect, RefObject, Dispatch, SetStateAction } from "react";
+import { useState, useRef, useEffect, Dispatch, SetStateAction } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { BASE_URL } from "../App";
 import ProjectSelector from "./ProjectSelector";
 import TimeSelect from "./TimeSelect";
 import PrioritySelect from "./PrioritySelect";
 import { useSettingsQuery } from "../hooks/useSettings";
+import useIsMobile from "../hooks/useIsMobile";
 
 interface TodoFormProps {
   token: string;
@@ -23,14 +24,18 @@ const TodoForm = ({ token, focusAddInput, setFocusAddInput }: TodoFormProps) => 
   const queryClient = useQueryClient();
   const toast = useToast();
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [isCreated, setIsCreated] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
-    if (focusAddInput && inputRef.current) {
-      inputRef.current.focus();
-      setFocusAddInput(false);
+    if (!isMobile) {
+      // Auto-focus on desktop
+      inputRef.current?.focus();
+    } else if (focusAddInput) {
+      // Focus on mobile only when focusAddInput is true
+      inputRef.current?.focus();
+      setFocusAddInput(false); // Reset the focus trigger
     }
-  }, [focusAddInput, setFocusAddInput]);
+  }, [isMobile, focusAddInput, setFocusAddInput]);
 
   useEffect(() => {
     if (settings) {
@@ -70,7 +75,6 @@ const TodoForm = ({ token, focusAddInput, setFocusAddInput }: TodoFormProps) => 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
       setNewTodo("");
-      setIsCreated(true);
       toast({
         title: "Todo added successfully.",
         description: "You have one more thing to do!",
@@ -88,23 +92,6 @@ const TodoForm = ({ token, focusAddInput, setFocusAddInput }: TodoFormProps) => 
     e.preventDefault();
     createTodo();
   };
-
-  useEffect(() => {
-    const focusInput = () => {
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-    };
-
-    // Focus on initial mount
-    focusInput();
-
-    // Focus after successful todo creation
-    if (isCreated) {
-      focusInput();
-      setIsCreated(false);
-    }
-  }, [isCreated]);
 
   if (isLoading) {
     return (
