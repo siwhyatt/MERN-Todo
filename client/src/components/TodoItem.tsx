@@ -19,7 +19,7 @@ const usePriorityStyles = () => {
       badgeText: "Low",
     },
     medium: {
-      color: colorMode === "light" ? "yellow.700" : "yellow.200",
+      color: colorMode === "light" ? "green.700" : "yellow.200",
       badgeColor: "yellow",
       badgeText: "Todo",
     },
@@ -145,6 +145,7 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
 
   const styles = priorityStyles[todo.priority];
   const timeStyles = getTimeStyles(todo.time);
+  const borderColor = useColorModeValue("gray.100", "gray.600")
 
   return (
     <Box position="relative">
@@ -193,7 +194,7 @@ const TodoItem = ({ todo, token }: TodoItemProps) => {
           alignItems={"start"}
           alignContent={"stretch"}
           border={"1px"}
-          borderColor={"gray.600"}
+          borderColor={borderColor}
           p={2}
           borderRadius={"lg"}
           justifyContent={"space-between"}

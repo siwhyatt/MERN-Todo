@@ -4,22 +4,16 @@ import { useQuery } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
 import reactLogo from '../assets/react.svg'
 import wooLogo from '../assets/WooSimon Logo DSG.png'
+import { useMemo } from "react";
+import { SortFunction, Todo } from '../utils/sortFunctions';
 
-export type Todo = {
-  _id: string;
-  userId: string;
-  title: string;
-  time: number;
-  priority: string;
-  completed: boolean;
-  projectId: string | null;
-};
 
 interface TodoListProps {
   token: string;
+  sortFunction: SortFunction;
 }
 
-const TodoList = ({ token }: TodoListProps) => {
+const TodoList = ({ token, sortFunction }: TodoListProps) => {
   const { data: todos, isLoading } = useQuery<Todo[]>({
     queryKey: ["todos"],
     queryFn: async () => {
@@ -42,6 +36,10 @@ const TodoList = ({ token }: TodoListProps) => {
       }
     },
   });
+
+  const sortedTodos = useMemo(() => {
+    return todos ? [...todos].sort(sortFunction) : [];
+  }, [todos, sortFunction]);
 
   return (
     <>
@@ -68,7 +66,7 @@ const TodoList = ({ token }: TodoListProps) => {
         </Stack>
       )}
       <Stack gap={3}>
-        {todos?.map((todo) => (
+        {sortedTodos?.map((todo) => (
           <TodoItem key={todo._id} todo={todo} token={token} />
         ))}
       </Stack>

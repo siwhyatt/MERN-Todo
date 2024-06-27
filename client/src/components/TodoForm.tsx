@@ -1,6 +1,6 @@
 import { Flex, Input, Spinner, useToast, TabList, Tab, TabPanels, TabPanel, Tabs, Text, Box, InputGroup, InputRightElement } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, RefObject, Dispatch, SetStateAction } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { BASE_URL } from "../App";
 import ProjectSelector from "./ProjectSelector";
@@ -10,9 +10,11 @@ import { useSettingsQuery } from "../hooks/useSettings";
 
 interface TodoFormProps {
   token: string;
+  focusAddInput: boolean;
+  setFocusAddInput: Dispatch<SetStateAction<boolean>>;
 }
 
-const TodoForm = ({ token }: TodoFormProps) => {
+const TodoForm = ({ token, focusAddInput, setFocusAddInput }: TodoFormProps) => {
   const { data: settings, isLoading, error } = useSettingsQuery(token);
   const [newTodo, setNewTodo] = useState("");
   const [newTime, setNewTime] = useState<string | undefined>(undefined);
@@ -22,6 +24,13 @@ const TodoForm = ({ token }: TodoFormProps) => {
   const toast = useToast();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isCreated, setIsCreated] = useState(false);
+
+  useEffect(() => {
+    if (focusAddInput && inputRef.current) {
+      inputRef.current.focus();
+      setFocusAddInput(false);
+    }
+  }, [focusAddInput, setFocusAddInput]);
 
   useEffect(() => {
     if (settings) {
@@ -117,21 +126,24 @@ const TodoForm = ({ token }: TodoFormProps) => {
     return null;
   }
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleSubmit(e);
+        }
+      }}
+    >
       <Box my="1rem" gap={2}>
-        <InputGroup>
+        <InputGroup
+        >
           <Input
             type='text'
             value={newTodo}
             onChange={(e) => setNewTodo(e.target.value)}
             ref={inputRef}
             autoFocus
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                handleSubmit(e);
-              }
-            }}
           />
           <InputRightElement>
             <Box onClick={handleSubmit} cursor="pointer">

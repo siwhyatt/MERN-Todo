@@ -4,11 +4,11 @@ import { ObjectId } from 'mongodb';
 interface Todo {
   _id?: ObjectId;
   userId: ObjectId;
-  projectId?: ObjectId; // Optional field to link to a project
+  projectId?: ObjectId;
   title: string;
-  time: number; // Time in minutes
-  priority: 'low' | 'medium' | 'high'; // Priority levels
-  completed: boolean;
+  time: number;
+  priority: 'low' | 'medium' | 'high';
+  createdAt: Date;
 }
 
 export default Todo;

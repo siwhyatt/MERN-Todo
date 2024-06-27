@@ -1,14 +1,19 @@
-import { Container, Heading, Text } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/react";
 import UserSettings from "./UserSettings";
+import SEO from "./SEO";
 
 const User = ({ token }: { token: string }) => {
   return (
-    <Container>
+    <>
+      <SEO
+        title="Settings | Full Stack Cat"
+        description="Configure your default settings for the Todo List App"
+      />
       <Heading as="h2" size="lg" mb={4}>
         Todo Defaults
       </Heading>
       <UserSettings token={token} />
-    </Container>
+    </>
   );
 };
 

@@ -22,8 +22,8 @@ const todoRoutes = (client: MongoClient): Router => {
         title,
         time,
         priority,
-        completed: false,
         projectId: projectId ? ObjectId.createFromHexString(projectId) : undefined,
+        createdAt: new Date(),
       };
       const result = await db.collection('todos').insertOne(newTodo);
 
@@ -68,8 +68,7 @@ const todoRoutes = (client: MongoClient): Router => {
     if (req.body.title !== undefined) updateFields.title = req.body.title;
     if (req.body.time !== undefined) updateFields.time = req.body.time;
     if (req.body.priority !== undefined) updateFields.priority = req.body.priority;
-    if (req.body.completed !== undefined) updateFields.completed = req.body.completed;
-    if (req.body.projectId !== undefined) updateFields.projectId = new ObjectId(req.body.projectId);
+    if (req.body.projectId !== undefined) updateFields.projectId = ObjectId.createFromHexString(req.body.projectId);
 
     try {
       const db = client.db();
