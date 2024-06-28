@@ -1,7 +1,7 @@
 import './App.css'
 import { Container, Spinner, Center, useColorModeValue, Flex, Box } from '@chakra-ui/react'
 import Navbar from './components/Navbar'
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import TodoPage from './components/TodoPage'
 import ProjectsPage from './components/ProjectsPage'
@@ -11,11 +11,10 @@ import PrivateRoute from './components/PrivateRoute'
 import RequestToken from './components/RequestToken'
 import EmailSent from './components/EmailSent'
 import ResetPassword from './components/ResetPassword'
-import { Helmet } from 'react-helmet';
 import Footer from './components/Footer';
 import { useSorting } from './utils/useSorting';
 
-export const BASE_URL = "/api"
+export const BASE_URL = import.meta.env.API_URL
 
 function App() {
   const [token, setToken] = useState<string | null>(null);
@@ -57,11 +56,6 @@ function App() {
 
   return (
     <Router>
-      <Helmet>
-        <html lang="en" />
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Helmet>
       <Flex direction={'column'} bg={bgColor} minHeight="100dvh" height="100dvh">
         <Navbar logout={logout} token={token} />
         <Box flex="1" overflowY="auto" bg={bgColor}>

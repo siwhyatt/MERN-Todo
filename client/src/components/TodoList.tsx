@@ -1,4 +1,4 @@
-import { Flex, Spinner, Stack, Text, Link, Box, HStack } from "@chakra-ui/react";
+import { Flex, Spinner, Stack, Text, Link, Box, HStack, Image, useColorModeValue } from "@chakra-ui/react";
 import TodoItem from "./TodoItem";
 import { useQuery } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
@@ -51,45 +51,41 @@ const TodoList = ({ token, sortFunction }: TodoListProps) => {
         </Flex>
       )}
       {!isLoading && todos?.length === 0 && (
-        <Stack alignItems={"center"} gap='3'>
+        <Stack alignItems={"center"} gap='10' py='4'>
+          <Box bg={useColorModeValue("gray.300", "gray.700")} p={6} borderWidth='1px' borderRadius='lg'>
+            <Text fontSize={"xl"} textAlign={"center"} color={"gray.500"}>
+              All tasks completed! 🤞
+            </Text>
+            <Text fontSize={"xl"} textAlign={"center"} color={"gray.500"}>
+              Go have a coffee ☕️
+            </Text>
+          </Box>
           <Text fontSize={"xl"} textAlign={"center"} color={"gray.500"}>
-            All tasks completed! 🤞
-          </Text>
-          <Text fontSize={"xl"} textAlign={"center"} color={"gray.500"}>
-            Go have a coffee ☕️
-          </Text>
-          <Text fontSize={"xl"} textAlign={"center"} color={"gray.500"}>
-            This app was built by Simon - Freelance Full Stack developer at {' '}
+            Built by Simon Whyatt <br></br> Freelance Full Stack developer at {' '}
             <Link color='teal.500' href="https://fullstack.cat" isExternal>
               FullStack.Cat
             </Link>
           </Text>
           <Text fontSize={"xl"} textAlign={"center"} color={"gray.500"}>
-            Made with MERN Stack: React, Express, NodeJS and MongoDB
+            Written in TypeScript using MERN Stack: MongoDB, ExpressJS, REACT and NodeJS
           </Text>
-          <HStack h={16} alignItems={"center"} justifyContent={"space-between"}>
-            <Box h={16}>
-              <a href="https://nodejs.org/en/about.com" target="_blank">
-                <img src={nodeLogo} alt="Node logo" height="50px" />
-              </a>
-            </Box>
-            <Box h={16}>
-              <a href="https://expressjs.com/" target="_blank">
-                <img src={expressLogo} alt="Express logo" height="50px" />
-              </a>
-            </Box>
-            <Box h={16}>
-              <a href="https://www.mongodb.com/" target="_blank">
-                <img src={mongoDbLogo} alt="MongoDb logo" height="50px" />
-              </a>
-            </Box>
-            <Box h={16}>
-              <a href="https://react.dev" target="_blank">
-                <img src={reactLogo} className="logo react" alt="React logo" height="50px" />
-              </a>
-            </Box>
+          <HStack>
+            <a href="https://www.mongodb.com/" target="_blank">
+              <Image src={mongoDbLogo} alt="MongoDb logo" boxSize="75px" />
+            </a>
+
+            <a href="https://expressjs.com/" target="_blank">
+              <Image src={expressLogo} alt="Express logo" boxSize="75px" />
+            </a>
+            <a href="https://react.dev" target="_blank">
+              <Image src={reactLogo} className="logo react" alt="React logo" boxSize="75px" />
+            </a>
+            <a href="https://nodejs.org/en/about.com" target="_blank">
+              <Image src={nodeLogo} alt="Node logo" boxSize="75px" />
+            </a>
+
           </HStack>
-        </Stack>
+        </Stack >
       )}
       <Stack gap={3}>
         {sortedTodos?.map((todo) => (
