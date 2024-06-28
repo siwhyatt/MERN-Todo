@@ -1,11 +1,11 @@
-import { Box, Button, Flex, Input, InputGroup, InputRightElement, Spinner, Stack, useToast } from "@chakra-ui/react";
+import { Box, Flex, Input, InputGroup, InputRightElement, Spinner, Stack, useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useRef, useEffect } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { BASE_URL } from "../App";
 
 interface ProjectFormProps {
-  token: string;
+  token: string | null;
 }
 
 const ProjectForm = ({ token }: ProjectFormProps) => {
@@ -41,8 +41,12 @@ const ProjectForm = ({ token }: ProjectFormProps) => {
         setNewDescription("");
         setIsCreated(true);
         return data;
-      } catch (error: any) {
-        throw new Error(error);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        } else {
+          throw new Error("An unknown error occurred");
+        }
       }
     },
     onSuccess: () => {

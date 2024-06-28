@@ -1,5 +1,5 @@
 import { FaEdit } from "react-icons/fa";
-import { Todo } from "./TodoList";
+import { Todo } from "../utils/sortFunctions";
 import { BASE_URL } from "../App";
 import {
   Modal,

@@ -43,6 +43,8 @@ const TodoList = ({ token, sortFunction }: TodoListProps) => {
     return todos ? [...todos].sort(sortFunction) : [];
   }, [todos, sortFunction]);
 
+  const bg = useColorModeValue("gray.300", "gray.700");
+
   return (
     <>
       {isLoading && (
@@ -52,7 +54,7 @@ const TodoList = ({ token, sortFunction }: TodoListProps) => {
       )}
       {!isLoading && todos?.length === 0 && (
         <Stack alignItems={"center"} gap='10' py='4'>
-          <Box bg={useColorModeValue("gray.300", "gray.700")} p={6} borderWidth='1px' borderRadius='lg'>
+          <Box bg={bg} p={6} borderWidth='1px' borderRadius='lg'>
             <Text fontSize={"xl"} textAlign={"center"} color={"gray.500"}>
               All tasks completed! 🤞
             </Text>

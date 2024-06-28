@@ -102,7 +102,7 @@ const UpdateProject = ({ project, token }: UpdateProjectProps) => {
                   autoFocus
                   type="text"
                   title="description"
-                  value={newDescription}
+                  value={newDescription as string}
                   onChange={(e) => setNewDescription(e.target.value)}
                   placeholder="Add project description?"
                 >

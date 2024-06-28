@@ -18,8 +18,8 @@ interface TodoFormProps {
 const TodoForm = ({ token, focusAddInput, setFocusAddInput }: TodoFormProps) => {
   const { data: settings, isLoading, error } = useSettingsQuery(token);
   const [newTodo, setNewTodo] = useState("");
-  const [newTime, setNewTime] = useState<string | undefined>(undefined);
-  const [newPriority, setNewPriority] = useState<string | undefined>(undefined);
+  const [newTime, setNewTime] = useState<string>("");
+  const [newPriority, setNewPriority] = useState<string>("");
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const queryClient = useQueryClient();
   const toast = useToast();
@@ -45,8 +45,8 @@ const TodoForm = ({ token, focusAddInput, setFocusAddInput }: TodoFormProps) => 
 
   useEffect(() => {
     if (settings) {
-      setNewTime(settings[0].defaultTime ? settings[0].defaultTime.toString() : "15");
-      setNewPriority(settings[0].defaultPriority || "medium");
+      setNewTime(settings.defaultTime?.toString() || "15");
+      setNewPriority(settings.defaultPriority || "medium");
     }
   }, [settings]);
 
@@ -62,7 +62,7 @@ const TodoForm = ({ token, focusAddInput, setFocusAddInput }: TodoFormProps) => 
           },
           body: JSON.stringify({
             title: newTodo,
-            time: parseInt(newTime),
+            time: parseInt(newTime as string),
             priority: newPriority,
             projectId: selectedProjectId,
           }),
@@ -74,8 +74,12 @@ const TodoForm = ({ token, focusAddInput, setFocusAddInput }: TodoFormProps) => 
         }
 
         return data;
-      } catch (error: any) {
-        throw new Error(error);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        } else {
+          throw new Error("An unknown error occurred");
+        }
       }
     },
     onSuccess: () => {
@@ -89,7 +93,7 @@ const TodoForm = ({ token, focusAddInput, setFocusAddInput }: TodoFormProps) => 
         isClosable: true,
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       alert(error.message);
     }
   });
@@ -153,10 +157,10 @@ const TodoForm = ({ token, focusAddInput, setFocusAddInput }: TodoFormProps) => 
         </TabList>
         <TabPanels>
           <TabPanel>
-            <TimeSelect value={newTime} onChange={setNewTime} />
+            <TimeSelect value={newTime as string} onChange={setNewTime} />
           </TabPanel>
           <TabPanel>
-            <PrioritySelect value={newPriority} onChange={setNewPriority} />
+            <PrioritySelect value={newPriority as string} onChange={setNewPriority} />
           </TabPanel>
           <TabPanel>
             <ProjectSelector

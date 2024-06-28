@@ -27,7 +27,7 @@ const RequestToken = () => {
 
       return data;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast({
         title: "Request successful.",
         description: "Please check your email inbox.",
@@ -38,7 +38,7 @@ const RequestToken = () => {
       setFormData({ email: "" });
       navigate('/reset-password/email-sent');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Request failed.",
         description: error.message,

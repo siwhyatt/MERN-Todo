@@ -7,7 +7,7 @@ import UpdateTodo from "./UpdateTodo.tsx"
 import { useProjectsQuery } from "../hooks/useProjects";
 import { useSwipeable } from 'react-swipeable';
 import { useMediaQuery } from '@chakra-ui/react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 
 const usePriorityStyles = () => {
   const { colorMode } = useColorMode();

@@ -10,7 +10,7 @@ import { useState } from 'react';
 
 interface ProjectItemProps {
   project: Project;
-  token: string;
+  token: string | null;
 }
 
 const ProjectItem = ({ project, token }: ProjectItemProps) => {
@@ -143,7 +143,7 @@ const ProjectItem = ({ project, token }: ProjectItemProps) => {
             </Text>
           </Box>
           <Stack align={'center'} gap={2}>
-            <UpdateProject key={project._id} project={project} token={token} />
+            <UpdateProject key={project._id} project={project} token={token as string} />
             {!isMobile &&
               <>
                 <Box color={"red.500"} cursor={"pointer"} onClick={() => deleteProject()}>

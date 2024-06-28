@@ -38,7 +38,7 @@ const ResetPassword = () => {
 
       return data;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast({
         title: "Password reset successful.",
         description: "You may now login with your new password.",
@@ -46,10 +46,10 @@ const ResetPassword = () => {
         duration: 5000,
         isClosable: true,
       });
-      setFormData({ email: "" });
+      setFormData({ password: "", resetToken: "" });
       navigate('/login');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Request failed.",
         description: error.message,

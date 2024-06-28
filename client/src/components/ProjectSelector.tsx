@@ -5,7 +5,7 @@ import { BASE_URL } from "../App";
 import { IoMdAdd } from "react-icons/io";
 
 interface ProjectSelectorProps {
-  token: string;
+  token: string | null;
   onProjectSelect: (projectId: string | null) => void;
   initialProjectId?: string | null;
   initialProjectName?: string | null;
@@ -69,7 +69,7 @@ const ProjectSelector = ({ token, onProjectSelect, initialProjectId = null }: Pr
         isClosable: true,
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       alert(error.message);
     }
   });

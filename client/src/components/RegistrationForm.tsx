@@ -25,7 +25,7 @@ const RegistrationForm = () => {
 
       return data;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast({
         title: "Registration successful.",
         description: "You have successfully registered.",
@@ -35,7 +35,7 @@ const RegistrationForm = () => {
       });
       setFormData({ username: "", email: "", password: "" });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Registration failed.",
         description: error.message,

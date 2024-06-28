@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
 
-const LoginForm = ({ setToken }: { setToken: (token: string) => void }) => {
+const LoginForm = ({ setToken }: { setToken: (token: string | null) => void }) => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
   const toast = useToast();
@@ -41,7 +41,7 @@ const LoginForm = ({ setToken }: { setToken: (token: string) => void }) => {
       localStorage.setItem('token', data.token);
       navigate('/');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Login failed.",
         description: error.message,
@@ -83,7 +83,7 @@ const LoginForm = ({ setToken }: { setToken: (token: string) => void }) => {
         <Button type="submit" isLoading={isPending} colorScheme="teal">
           Login
         </Button>
-        <Link align="center" as={RouterLink} to="/reset-password/request">Forgot password?</Link>
+        <Link textAlign="center" as={RouterLink} to="/reset-password/request">Forgot password?</Link>
       </Stack>
     </form>
   );

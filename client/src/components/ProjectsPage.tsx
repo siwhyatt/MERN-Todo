@@ -1,4 +1,4 @@
-import { Container, Heading, Text } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/react";
 import ProjectList from "./ProjectList";
 import ProjectForm from "./ProjectForm";
 import SEO from "./SEO";

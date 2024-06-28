@@ -4,7 +4,7 @@ import RegistrationForm from "./RegistrationForm"
 import LoginForm from "./LoginForm"
 
 interface LoginPageProps {
-  setToken: (token: string) => void;
+  setToken: (token: string | null) => void;
 }
 
 const LoginPage = ({ setToken }: LoginPageProps) => (

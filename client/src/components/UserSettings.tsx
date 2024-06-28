@@ -16,17 +16,18 @@ const UserSettings = ({ token }: { token: string }) => {
 
   useEffect(() => {
     if (settings) {
-      setDefaultTime(settings[0].defaultTime?.toString() || "15");
-      setDefaultPriority(settings[0].defaultPriority || "medium");
+      console.log(settings)
+      setDefaultTime(settings.defaultTime ? defaultTime.toString() : "15");
+      setDefaultPriority(settings.defaultPriority || "medium");
     }
   }, [settings]);
 
   const mutation = useMutation({
     mutationFn: async () => {
-      if (!settings || !settings[0]._id) {
+      if (!settings || !settings._id) {
         throw new Error("Settings not loaded");
       }
-      const res = await fetch(BASE_URL + `/user-settings/${settings[0]._id}`, {
+      const res = await fetch(BASE_URL + `/user-settings/${settings._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -70,6 +71,9 @@ const UserSettings = ({ token }: { token: string }) => {
     mutation.mutate();
   };
 
+  const bg = useColorModeValue("gray.300", "gray.700");
+
+
   if (isLoading) {
     return <Spinner />;
   }
@@ -77,13 +81,13 @@ const UserSettings = ({ token }: { token: string }) => {
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={3}>
-        <Box bg={useColorModeValue("gray.300", "gray.700")} p={4} my={3} borderWidth='1px' borderRadius='lg'>
+        <Box bg={bg} p={4} my={3} borderWidth='1px' borderRadius='lg'>
           <Text align={'center'} mb={2}>
             Default todo time:
           </Text>
           <TimeSelect value={defaultTime} onChange={setDefaultTime} />
         </Box>
-        <Box bg={useColorModeValue("gray.300", "gray.700")} p={4} my={3} borderWidth='1px' borderRadius='lg'>
+        <Box bg={bg} p={4} my={3} borderWidth='1px' borderRadius='lg'>
           <Text align={'center'} mb={2}>
             Default todo priority:
           </Text>

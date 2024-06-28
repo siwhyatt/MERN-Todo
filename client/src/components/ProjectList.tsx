@@ -17,7 +17,6 @@ const ProjectList = ({ token }: ProjectListProps) => {
   const { data: projects, isLoading, error } = useProjectsQuery(token);
 
   if (error) {
-    // Handle errors here (optional)
     return <div>Error fetching projects: {error.message}</div>;
   }
 

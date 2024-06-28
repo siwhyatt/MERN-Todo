@@ -68,14 +68,14 @@ function App() {
                   <Route path="/reset-password/email-sent" element={<EmailSent />} />
                   <Route path="/reset-password/" element={<ResetPassword />} />
                   <Route element={<PrivateRoute token={token} />}>
-                    <Route path="/" element={<TodoPage
-                      token={token}
+                    <Route path="/" element={token ? (<TodoPage
+                      token={token} // Error here
                       sortFunction={sortFunction}
                       focusAddInput={focusAddInput}
                       setFocusAddInput={setFocusAddInput}
-                    />} />
-                    <Route path="/projects" element={<ProjectsPage token={token} />} />
-                    <Route path="/user" element={<User token={token} />} />
+                    />) : null} />
+                    <Route path="/projects" element={token ? <ProjectsPage token={token} /> : null} /> // Error here
+                    <Route path="/user" element={token ? <User token={token} /> : null} /> // Error here
                   </Route>
                 </Routes>
               </Container>
