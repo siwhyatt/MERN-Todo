@@ -1,8 +1,8 @@
 import { RadioGroup, Radio, Stack } from "@chakra-ui/react";
 
 interface PrioritySelectProps {
-  value: string;
-  onChange: (value: string) => void;
+  value: 'low' | 'medium' | 'high';
+  onChange: (value: 'low' | 'medium' | 'high') => void;
 }
 
 const PrioritySelect = ({ value, onChange }: PrioritySelectProps) => {

@@ -31,7 +31,7 @@ const UpdateTodo = ({ todo, token }: UpdateTodoProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [newTitle, setNewTitle] = useState(todo.title);
   const [newTime, setNewTime] = useState(todo.time.toString());
-  const [newPriority, setNewPriority] = useState(todo.priority);
+  const [newPriority, setNewPriority] = useState<'low' | 'medium' | 'high'>(todo.priority as 'low' | 'medium' | 'high');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(todo.projectId || null);
   const queryClient = useQueryClient();
   const toast = useToast();
@@ -107,7 +107,7 @@ const UpdateTodo = ({ todo, token }: UpdateTodoProps) => {
                 >
                 </Input>
                 <TimeSelect value={newTime} onChange={setNewTime} />
-                <PrioritySelect value={newPriority} onChange={setNewPriority} />
+                <PrioritySelect value={newPriority} onChange={(value) => setNewPriority(value)} />
                 <ProjectSelector
                   token={token}
                   onProjectSelect={setSelectedProjectId}

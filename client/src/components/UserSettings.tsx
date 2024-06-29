@@ -6,19 +6,17 @@ import TimeSelect from "./TimeSelect";
 import PrioritySelect from "./PrioritySelect";
 import { useSettingsQuery } from "../hooks/useSettings";
 
-
 const UserSettings = ({ token }: { token: string }) => {
+  const { data: settings, isLoading, error } = useSettingsQuery(token);
   const [defaultTime, setDefaultTime] = useState<string>("");
-  const [defaultPriority, setDefaultPriority] = useState<string>("");
+  const [defaultPriority, setDefaultPriority] = useState<'low' | 'medium' | 'high'>('medium');
   const toast = useToast();
   const queryClient = useQueryClient();
-  const { data: settings, isLoading, error } = useSettingsQuery(token);
 
   useEffect(() => {
     if (settings) {
-      console.log(settings)
-      setDefaultTime(settings.defaultTime ? defaultTime.toString() : "15");
-      setDefaultPriority(settings.defaultPriority || "medium");
+      setDefaultTime(settings.defaultTime ? settings.defaultTime.toString() : "15");
+      setDefaultPriority(settings.defaultPriority as 'low' | 'medium' | 'high' || "medium");
     }
   }, [settings]);
 
@@ -78,6 +76,10 @@ const UserSettings = ({ token }: { token: string }) => {
     return <Spinner />;
   }
 
+  if (error) {
+    return <Text color="red.500">Failed to load settings</Text>;
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={3}>
@@ -91,7 +93,7 @@ const UserSettings = ({ token }: { token: string }) => {
           <Text align={'center'} mb={2}>
             Default todo priority:
           </Text>
-          <PrioritySelect value={defaultPriority} onChange={setDefaultPriority} />
+          <PrioritySelect value={defaultPriority} onChange={(value) => setDefaultPriority(value)} />
         </Box>
         <Button type="submit" isLoading={mutation.isPending} colorScheme="teal">
           Save Settings

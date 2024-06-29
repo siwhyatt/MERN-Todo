@@ -19,7 +19,7 @@ const TodoForm = ({ token, focusAddInput, setFocusAddInput }: TodoFormProps) => 
   const { data: settings, isLoading, error } = useSettingsQuery(token);
   const [newTodo, setNewTodo] = useState("");
   const [newTime, setNewTime] = useState<string>("");
-  const [newPriority, setNewPriority] = useState<string>("");
+  const [newPriority, setNewPriority] = useState<'low' | 'medium' | 'high'>('medium');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const queryClient = useQueryClient();
   const toast = useToast();
@@ -46,7 +46,7 @@ const TodoForm = ({ token, focusAddInput, setFocusAddInput }: TodoFormProps) => 
   useEffect(() => {
     if (settings) {
       setNewTime(settings.defaultTime?.toString() || "15");
-      setNewPriority(settings.defaultPriority || "medium");
+      setNewPriority(settings.defaultPriority as 'low' | 'medium' | 'high' || "medium");
     }
   }, [settings]);
 
@@ -160,7 +160,7 @@ const TodoForm = ({ token, focusAddInput, setFocusAddInput }: TodoFormProps) => 
             <TimeSelect value={newTime as string} onChange={setNewTime} />
           </TabPanel>
           <TabPanel>
-            <PrioritySelect value={newPriority as string} onChange={setNewPriority} />
+            <PrioritySelect value={newPriority} onChange={setNewPriority} />
           </TabPanel>
           <TabPanel>
             <ProjectSelector

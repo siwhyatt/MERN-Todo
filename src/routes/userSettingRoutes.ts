@@ -16,7 +16,11 @@ const userSettingRoutes = (client: MongoClient): Router => {
 
     try {
       const db = client.db();
-      const userSettings = await db.collection('userSettings').find({ userId: new ObjectId(userId) }).toArray();
+      const userSettings = await db.collection('userSettings').findOne({ userId: new ObjectId(userId) });
+
+      if (!userSettings) {
+        return res.status(404).json({ message: 'User settings not found' });
+      }
 
       res.status(200).json(userSettings);
     } catch (error) {
@@ -24,7 +28,6 @@ const userSettingRoutes = (client: MongoClient): Router => {
       res.status(500).json({ message: 'Server error' });
     }
   });
-
   // Update user settings
   router.put('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
