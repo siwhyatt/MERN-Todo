@@ -18,6 +18,10 @@ app.use(express.json());
 
 // MongoDB Connection
 const uri = process.env.MONGO_URI as string;
+if (!uri) {
+  console.error('Mongo URI not properly defined in environment variable');
+  process.exit(1);
+}
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
