@@ -2,27 +2,45 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { MongoClient, ObjectId } from 'mongodb';
+import { MongoClient } from 'mongodb';
 import User from '../models/User';
+import UserSettings from '../models/UserSettings';
+import { generateToken } from '../utils/auth';
 
 export const register = (client: MongoClient) => async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
 
   try {
     const db = client.db();
-    const existingUser = await db.collection('users').findOne({ email });
+
+    const usersCollection = db.collection<User>('users');
+    const userSettingsCollection = db.collection<UserSettings>('userSettings');
+
+    const existingUser = await usersCollection.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const newUser: User = { username, email, password: hashedPassword };
-    const result = await db.collection('users').insertOne(newUser);
+    // Create new user
+    const newUser = await usersCollection.insertOne({
+      username,
+      email,
+      password: hashedPassword,
+    });
 
-    const createdUser = await db.collection('users').findOne({ _id: result.insertedId });
+    // Create default user settings
+    await userSettingsCollection.insertOne({
+      userId: newUser.insertedId,
+      defaultTime: 15,
+      defaultPriority: 'medium',
+    });
 
-    res.status(201).json({ message: 'User registered successfully', user: createdUser });
+    const token = generateToken(newUser.insertedId.toString());
+
+    res.status(201).json({ message: 'User registered successfully', token });
+
   } catch (error) {
     console.error('Error registering user:', error);
     res.status(500).json({ message: 'Server error' });
@@ -44,9 +62,10 @@ export const login = (client: MongoClient) => async (req: Request, res: Response
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
+    const token = generateToken(user._id.toString());
 
     res.status(200).json({ token });
+
   } catch (error) {
     console.error('Error logging in user:', error);
     res.status(500).json({ message: 'Server error' });
