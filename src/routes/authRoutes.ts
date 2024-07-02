@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { MongoClient } from 'mongodb';
-import { register, login } from '../controllers/authController';
+import { register, login, deleteUser } from '../controllers/authController';
+import { authenticateToken } from '../middleware/authMiddleware';
 
 const authRoutes = (client: MongoClient): Router => {
   const router = Router();
@@ -10,6 +11,9 @@ const authRoutes = (client: MongoClient): Router => {
 
   // Login route
   router.post('/login', login(client));
+
+  // Delete route
+  router.delete('/delete', authenticateToken, deleteUser(client));
 
   return router;
 };
