@@ -15,6 +15,11 @@ const authRoutes = (client: MongoClient): Router => {
   // Delete route
   router.delete('/delete', authenticateToken, deleteUser(client));
 
+  // Token validation
+  router.get('/validate-token', authenticateToken, (req, res) => {
+    res.status(200).json({ valid: true });
+  });
+
   return router;
 };
 
