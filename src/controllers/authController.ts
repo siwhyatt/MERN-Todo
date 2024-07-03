@@ -23,6 +23,8 @@ export const register = (client: MongoClient) => async (req: Request, res: Respo
       }
     );
 
+    console.log('CAPTCHA verification response:', captchaResponse.data);
+
     if (!captchaResponse.data.success || captchaResponse.data.score < 0.5) {
       return res.status(400).json({ message: "CAPTCHA verification failed" });
     }
