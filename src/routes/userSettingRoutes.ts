@@ -40,6 +40,8 @@ const userSettingRoutes = (client: MongoClient): Router => {
     const updateFields: { [key: string]: any } = {};
     if (req.body.defaultTime !== undefined) updateFields.defaultTime = req.body.defaultTime;
     if (req.body.defaultPriority !== undefined) updateFields.defaultPriority = req.body.defaultPriority;
+    if (req.body.defaultSorting !== undefined) updateFields.defaultSorting = req.body.defaultSorting;
+    if (req.body.defaultOrdering !== undefined) updateFields.defaultOrdering = req.body.defaultOrdering;
 
     try {
       const db = client.db();
