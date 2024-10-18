@@ -53,6 +53,8 @@ export const register = (client: MongoClient) => async (req: Request, res: Respo
       userId: newUser.insertedId,
       defaultTime: 15,
       defaultPriority: 'medium',
+      defaultOrdering: 'ascending',
+      defaultSorting: 'priority',
     });
 
     const token = generateToken(newUser.insertedId.toString());
