@@ -8,6 +8,7 @@ interface Todo {
   title: string;
   time: number;
   priority: 'low' | 'medium' | 'high';
+  snoozedUntil?: Date;
   createdAt: Date;
 }
 
