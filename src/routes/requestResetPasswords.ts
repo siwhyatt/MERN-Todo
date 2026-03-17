@@ -1,7 +1,7 @@
 // src/routes/resetPasswordRoutes.ts
 import { Router, Request, Response } from 'express';
 import { MongoClient } from 'mongodb';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { randomBytes } from 'crypto';
 import sendResetPasswordEmail from '../services/mailer';
 
