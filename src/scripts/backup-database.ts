@@ -172,9 +172,13 @@ async function runDatabaseBackup(): Promise<void> {
 
   // Get database name from URI or environment variable
   const dbNameMatch = mongoUri.match(/\/([^/?]+)(\?|$)/);
+  // MONGO_URI has no /dbname path segment (it's an Atlas SRV string ending in
+  // just "/"), so the app's own client.db() calls (see e.g. todoRoutes.ts)
+  // fall back to the MongoDB driver's default database name, "test" - that's
+  // where the real data actually lives, so match it here rather than guessing
+  // a made-up default.
   const dbName =
-    process.env.MONGO_DB_NAME ||
-    (dbNameMatch ? dbNameMatch[1] : "todoapi_database");
+    process.env.MONGO_DB_NAME || (dbNameMatch ? dbNameMatch[1] : "test");
 
   // Backup directory - default to project root /backups folder
   const backupDir =
