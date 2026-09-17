@@ -7,6 +7,7 @@ import todoRoutes from './routes/todoRoutes';
 import projectRoutes from './routes/projectRoutes';
 import resetPasswordRoutes from './routes/requestResetPasswords';
 import userSettingRoutes from './routes/userSettingRoutes';
+import { initializeCronJobs } from './cron';
 
 dotenv.config();
 
@@ -51,6 +52,7 @@ async function connectDB() {
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
+      initializeCronJobs();
     });
   } catch (error) {
     console.error('MongoDB connection error:', error);

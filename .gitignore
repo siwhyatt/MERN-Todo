@@ -104,3 +104,6 @@ dist-ssr
 # Windows
 Thumbs.db
 
+# Database backups
+backups/
+
